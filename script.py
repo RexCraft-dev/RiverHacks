@@ -56,8 +56,9 @@ def get_cheat(df):
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
     parser.add_argument("--file", required=True, help="Path to CSV file")
-    parser.add_argument("--overall", type=int, help="Show top N projects only")
-    parser.add_argument("--track", type=int, help="Show projects in selected track")
+    parser.add_argument("--all", action="store_true", help="Export all track and overall results to CSV")
+    parser.add_argument("--overall", action="store_true", help="Show top N projects only")
+    parser.add_argument("--track", help="Show projects in selected track")
     parser.add_argument("--cheat", action="store_true", help="Show projects suspected of cheating")
     parser.add_argument("--export", help="Export results to a CSV file")
 
@@ -68,8 +69,6 @@ def main():
 
     if args.overall:
         result_df = get_overall(df, include_overall=True)
-        if args.overall > 0:
-            result_df = result_df.head(args.overall)
         print("\nOverall Results")
         print("------------------------------------------------------------------------------------------------------")
         print(result_df.to_string())
@@ -82,11 +81,38 @@ def main():
 
     if args.cheat:
         result_df = get_cheat(df)
+        print("\nSuspected Cheaters")
+        print("------------------------------------------------------------------------------------------------------")
         print(result_df["ProjectName"].to_string(index=False))
 
-    if args.export:
+    if args.all:
+        base_export_path = args.export if args.export else "results"
+
+        # Export overall
+        overall_df = get_overall(df, include_overall=True)
+        overall_df.index.name = "Rank"
+        overall_df = overall_df.sort_values(by="overall_rating", ascending=True)
+        overall_filename = f"{base_export_path}_overall.txt"
+        with open(overall_filename, "w") as f:
+            f.write(df.to_string())
+        print(f"\nExported overall results to {overall_filename}")
+
+        # Export each track
+        tracks = ["Best Design", "Cybersecurity", "webAI",
+                  "Community Engagement", "Community Choice"]
+
+        for track in tracks:
+            track_df = get_track(df, tracks.index(track))
+            track_df.index.name = "Rank"
+            track_df = track_df.sort_values(by="overall_rating", ascending=True)
+            track_filename = f"{track.replace(' ', '_').lower()}.txt"
+            with open(track_filename, "w") as f:
+                f.write(track_df.to_string())
+            print(f"Exported {track} results to {track_filename}")
+
+    elif args.export:
         result_df.to_csv(args.export, index=False)
-        print(f"\nExported to {args.export}")
+        print(f"\nExported results to {args.export}")
 
 
 if __name__ == "__main__":
