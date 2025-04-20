@@ -1,0 +1,54 @@
+OVERALL RESULTS
+     ProjectName  overall_rating
+Rank                            
+1      Project F        4.500000
+2      Project J        4.375000
+3      Project A        4.312500
+4      Project B        4.166667
+5      Project D        4.166667
+6      Project E        4.125000
+7      Project I        4.125000
+8      Project C        4.000000
+9      Project H        3.625000
+10     Project G        3.500000
+
+
+BEST DESIGN RESULTS
+Empty DataFrame
+Columns: [ProjectName, overall_rating]
+Index: []
+
+
+CYBERSECURITY RESULTS
+     ProjectName  overall_rating
+Rank                            
+1      Project A        4.312500
+2      Project D        4.166667
+3      Project H        3.625000
+
+
+WEBAI RESULTS
+     ProjectName  overall_rating
+Rank                            
+1      Project F          4.5000
+2      Project J          4.3750
+3      Project A          4.3125
+4      Project E          4.1250
+5      Project I          4.1250
+
+
+COMMUNITY ENGAGEMENT RESULTS
+     ProjectName  overall_rating
+Rank                            
+1      Project F        4.500000
+2      Project B        4.166667
+3      Project G        3.500000
+
+
+COMMUNITY CHOICE RESULTS
+     ProjectName  overall_rating
+Rank                            
+1      Project B        4.166667
+2      Project C        4.000000
+3      Project H        3.625000
+4      Project G        3.500000

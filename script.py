@@ -107,7 +107,7 @@ def export_all_results(df, export_path=None, count=None):
         print(f"Exported {track} results to {track_filename}")
 
 
-def export_inline_results(df, output_file, count=None):
+def export_inline_results(df, output_file="list_results.txt", count=None):
     sections = []
 
     # Overall section
@@ -152,7 +152,8 @@ def main():
     parser.add_argument("--export", help="Export results to a CSV file")
     parser.add_argument("--exportall", action="store_true",
                         help="Export all track and overall results to CSV")
-    parser.add_argument("--inline", help="Path to a text file to write combined overall and track results")
+    parser.add_argument("--inline", action="store_true",
+                        help="Path to a text file to write combined overall and track results")
 
     args = parser.parse_args()
 
@@ -192,7 +193,7 @@ def main():
         print(f"\nExported results to {args.export}")
 
     if args.inline:
-        export_inline_results(df, args.inline, count=args.count)
+        export_inline_results(df, count=args.count)
 
 
 if __name__ == "__main__":
