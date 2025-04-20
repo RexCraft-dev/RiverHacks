@@ -1,29 +1,29 @@
 # Hackathon Score Processor
 
-This tool helps automate the parsing, scoring, and exporting of hackathon project evaluations from CSV files. It calculates overall scores, evaluates track-specific rankings, identifies potential cheaters, and supports exporting formatted results to CSV or text files.
+This script helps automate the scoring, ranking, and exporting of hackathon project evaluations based on CSV data. It supports calculating average scores across categories, viewing and exporting track-specific rankings, flagging potential cheaters, and producing formatted output in both CSV and plain text formats.
 
 ## Features
 
-- Calculates average scores across judging categories
-- Ranks projects by overall and track-specific performance
-- Flags projects marked for potential cheating
-- CLI-friendly: supports quick filtering, exporting, and display
-- Outputs results to CSV or plain text for distribution
+- Calculates average project scores across multiple judging categories
+- Supports filtering and exporting by individual judging tracks
+- Flags entries marked for suspected cheating
+- Exports ranked results in both individual and combined formats
+- CLI-based control for filtering, limiting, and formatting outputs
 
-## Judging Criteria Handled
+## Judging Categories
 
-- Innovation  
-- Value & Impact  
-- Completeness  
-- Technical Implementation  
+- Innovation
+- Value & Impact
+- Completeness
+- Technical Implementation
 
-## Supported Tracks
+## Available Tracks
 
-- Best Design  
-- Cybersecurity  
-- webAI  
-- Community Engagement  
-- Community Choice  
+- Best Design
+- Cybersecurity
+- webAI
+- Community Engagement
+- Community Choice
 
 ## Requirements
 
@@ -38,38 +38,48 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Basic Example
+### Required
 ```bash
-python script.py --file results.csv --overall
+python script.py --file path/to/data.csv
 ```
 
-### View Results by Track
+### Optional Flags
+
+- `--overall` - Print overall project rankings to the console
+- `--track [index]` - Show results for a specific track (use index from 1-5)
+- `--cheat` - Show projects marked with suspected cheating
+- `--count [N]` - Show only the top N projects in any output
+- `--export [filename.csv]` - Export the most recent results to a CSV
+- `--exportall` - Export overall and track rankings into separate `.txt` files
+- `--inline` - Export overall and all track results into one combined `.txt` file
+
+### Example Commands
+
+View top 5 projects overall:
 ```bash
-python script.py --file results.csv --track 2
+python script.py --file results.csv --overall --count 5
 ```
 
-### Show Suspected Cheating Projects
+Export each track and overall results to separate text files:
+```bash
+python script.py --file results.csv --exportall --count 10
+```
+
+Export all rankings to a single file:
+```bash
+python script.py --file results.csv --inline results.txt --count 10
+```
+
+Show only projects suspected of cheating:
 ```bash
 python script.py --file results.csv --cheat
 ```
 
-### Export Overall and Track Rankings to Files
-```bash
-python script.py --file results.csv --all --export output/results
-```
-
-### Export a Single View to CSV
-```bash
-python script.py --file results.csv --overall --export overall.csv
-```
-
-## Notes
-
-- Column names in the CSV must match the expected format. If using another form, adjust the column renaming logic in `load_data()`.
-- Rankings are sorted with one entry per project.
-- `--all` will export all processed results to individual `.txt` files for each track and overall rankings.
+## Output
+- Rankings are sorted highest to lowest by overall average score
+- Rank numbers begin at 1 for each section
+- Results can be printed to console, saved per category, or saved inline to a single file
 
 ## License
 
 MIT License
-
