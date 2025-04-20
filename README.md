@@ -80,6 +80,16 @@ python script.py --file results.csv --cheat
 - Rank numbers begin at 1 for each section
 - Results can be printed to console, saved per category, or saved inline to a single file
 
+## Example Outputs
+### Display Results
+![printresults](https://github.com/user-attachments/assets/13305c4d-5cc3-424c-bf67-67cf17eb5f5e)
+
+### Saved File of Results
+![txtfile](https://github.com/user-attachments/assets/a3137924-13ea-4d8b-a713-1276c868dc60)
+
+
+
+
 ## License
 
 MIT License
