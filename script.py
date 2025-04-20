@@ -3,44 +3,59 @@ import argparse
 
 
 def load_data(file):
+    # Load the CSV and rename columns for easier reference
     df = pd.read_csv(file)
     df = df.rename(columns={"Project Name (from Project)": "ProjectName"})
     df = df.rename(columns={"Track Option 1 (from ProjectTable 4)": "Track1"})
     df = df.rename(columns={"Track Option 2 (from ProjectTable 4)": "Track2"})
+
+    # Extract only the relevant columns for scoring and analysis
     new_df = df[["ProjectName", "Innovation", "Value & Impact",
                  "Completeness", "Technical Implementation",
                  "Track1", "Track2", "Cheating"]].copy()
+
+    # Compute average score across the 4 judging categories
     new_df["overall_rating"] = new_df[["Innovation", "Value & Impact", "Completeness",
                                        "Technical Implementation"]].mean(axis=1)
     return new_df
 
 
 def get_overall(df, include_overall=True):
+    # Prepare the list of columns to average
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
     if include_overall:
         cols.append("overall_rating")
+
+    # Group by project name and compute average scores
     grouped = df.groupby("ProjectName", as_index=False)[cols].mean()
+
+    # Rank projects by overall rating (ascending first, then descending if flagged)
     grouped = grouped.sort_values(by="overall_rating", ascending=True).reset_index(drop=True)
-    grouped.index = grouped.index + 1  # Make index start at 1 instead of 0
+    grouped.index = grouped.index + 1
     grouped.index.name = "Rank"
+
     if include_overall:
         grouped = grouped.sort_values(by="overall_rating")
+
     return grouped
 
 
 def get_track(df, track, include_overall=True):
+    # List of all valid track names (indexed)
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
     tracks = ["", "Best Overall", "Best Design", "Cybersecurity", "webAI",
               "Community Engagement", "Community Choice"]
 
+    # Filter entries where the project is in the selected track
     df = df[(df["Track1"] == tracks[track]) | (df["Track2"] == tracks[track])].copy()
 
     if include_overall:
         cols.append("overall_rating")
 
+    # Group and rank within the track
     grouped = df.groupby("ProjectName", as_index=False)[cols].mean()
     grouped = grouped.sort_values(by="overall_rating", ascending=True).reset_index(drop=True)
-    grouped.index = grouped.index + 1  # Make index start at 1 instead of 0
+    grouped.index = grouped.index + 1
     grouped.index.name = "Rank"
 
     if include_overall:
@@ -50,6 +65,7 @@ def get_track(df, track, include_overall=True):
 
 
 def get_cheat(df):
+    # Return only projects flagged as cheating
     return df[df["Cheating"] == "checked"]
 
 
@@ -64,31 +80,36 @@ def main():
 
     args = parser.parse_args()
 
+    # Load and process input data
     df = load_data(args.file)
     result_df = df
 
+    # Print overall rankings to console
     if args.overall:
         result_df = get_overall(df, include_overall=True)
         print("\nOverall Results")
         print("------------------------------------------------------------------------------------------------------")
         print(result_df.to_string())
 
+    # Print selected track results to console
     if args.track:
         result_df = get_track(df, args.track)
         print(f"\nResults for track: {args.track}")
         print("------------------------------------------------------------------------------------------------------")
         print(result_df.to_string())
 
+    # Print list of suspected cheating projects
     if args.cheat:
         result_df = get_cheat(df)
         print("\nSuspected Cheaters")
         print("------------------------------------------------------------------------------------------------------")
         print(result_df["ProjectName"].to_string(index=False))
 
+    # Export all results by track and overall
     if args.all:
         base_export_path = args.export if args.export else "results"
 
-        # Export overall
+        # Export overall rankings
         overall_df = get_overall(df, include_overall=True)
         overall_df.index.name = "Rank"
         overall_df = overall_df.sort_values(by="overall_rating", ascending=True)
@@ -98,7 +119,7 @@ def main():
             f.write(overall_df.to_string())
         print(f"\nExported overall results to {overall_filename}")
 
-        # Export each track
+        # Export rankings for each track individually
         tracks = ["Best Design", "Cybersecurity", "webAI",
                   "Community Engagement", "Community Choice"]
 
@@ -110,8 +131,9 @@ def main():
             track_filename = f"{track.replace(' ', '_').lower()}.txt"
             with open(track_filename, "w") as f:
                 f.write(track_df.to_string())
-            print(f"Exported {track} resultclears to {track_filename}")
+            print(f"Exported {track} results to {track_filename}")
 
+    # If only --export is used, export the last viewed result set
     elif args.export:
         result_df.to_csv(args.export, index=False)
         print(f"\nExported results to {args.export}")
