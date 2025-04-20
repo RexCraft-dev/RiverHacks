@@ -99,7 +99,6 @@ def export_all_results(df, export_path=None):
         print(f"Exported {track} results to {track_filename}")
 
 
-
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
     parser.add_argument("--file", required=True, help="Path to CSV file")
