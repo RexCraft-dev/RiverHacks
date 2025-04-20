@@ -82,7 +82,8 @@ python script.py --file results.csv --cheat
 
 ## Example Outputs
 ### Display Results
-![printresults](https://github.com/user-attachments/assets/13305c4d-5cc3-424c-bf67-67cf17eb5f5e)
+![printresults](https://github.com/user-attachments/assets/c5980c67-4fed-4226-b250-936f97200582)
+
 
 ### Saved File of Results
 ![txtfile](https://github.com/user-attachments/assets/a3137924-13ea-4d8b-a713-1276c868dc60)
