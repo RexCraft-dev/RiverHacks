@@ -65,9 +65,9 @@ Export each track and overall results to separate text files:
 python script.py --file results.csv --exportall --count 10
 ```
 
-Export all rankings to a single file:
+Export all rankings (top 10) to a single file:
 ```bash
-python script.py --file results.csv --inline results.txt --count 10
+python script.py --file results.csv --inline --count 10
 ```
 
 Show only projects suspected of cheating:
