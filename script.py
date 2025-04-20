@@ -15,36 +15,50 @@ def load_data(file):
     return new_df
 
 
-def get_aggregated(df, include_overall=True):
+def get_overall(df, include_overall=True):
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
     if include_overall:
         cols.append("overall_rating")
     grouped = df.groupby("ProjectName", as_index=False)[cols].mean()
+    grouped = grouped.sort_values(by="overall_rating", ascending=True).reset_index(drop=True)
+    grouped.index = grouped.index + 1  # Make index start at 1 instead of 0
+    grouped.index.name = "Rank"
     if include_overall:
-        grouped = grouped.sort_values(by="overall_rating", ascending=False)
+        grouped = grouped.sort_values(by="overall_rating")
     return grouped
 
 
 def get_track(df, track, include_overall=True):
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
-    df = df[(df["Track1"] == track) | (df["Track2"] == track)].copy()
+    tracks = ["", "Best Overall", "Best Design", "Cybersecurity", "webAI",
+              "Community Engagement", "Community Choice"]
+
+    df = df[(df["Track1"] == tracks[track]) | (df["Track2"] == tracks[track])].copy()
 
     if include_overall:
         cols.append("overall_rating")
 
     grouped = df.groupby("ProjectName", as_index=False)[cols].mean()
+    grouped = grouped.sort_values(by="overall_rating", ascending=True).reset_index(drop=True)
+    grouped.index = grouped.index + 1  # Make index start at 1 instead of 0
+    grouped.index.name = "Rank"
 
     if include_overall:
         grouped = grouped.sort_values(by="overall_rating", ascending=False)
 
     return grouped
+
+
+def get_cheat(df):
+    return df[df["Cheating"] == "checked"]
 
 
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
     parser.add_argument("--file", required=True, help="Path to CSV file")
     parser.add_argument("--overall", type=int, help="Show top N projects only")
-    parser.add_argument("--track", help="Show projects in selected track")
+    parser.add_argument("--track", type=int, help="Show projects in selected track")
+    parser.add_argument("--cheat", action="store_true", help="Show projects suspected of cheating")
     parser.add_argument("--export", help="Export results to a CSV file")
 
     args = parser.parse_args()
@@ -53,15 +67,22 @@ def main():
     result_df = df
 
     if args.overall:
-        result_df = get_aggregated(df, include_overall=not args.track)
-        result_df = result_df.head(args.overall)
-        print(result_df.to_string(index=False))
+        result_df = get_overall(df, include_overall=True)
+        if args.overall > 0:
+            result_df = result_df.head(args.overall)
+        print("\nOverall Results")
+        print("------------------------------------------------------------------------------------------------------")
+        print(result_df.to_string())
 
     if args.track:
         result_df = get_track(df, args.track)
-        print(f"Results for track: {args.track}")
-        print("------------------------------------------------------------------------------------------------")
-        print(result_df.to_string(index=False))
+        print(f"\nResults for track: {args.track}")
+        print("------------------------------------------------------------------------------------------------------")
+        print(result_df.to_string())
+
+    if args.cheat:
+        result_df = get_cheat(df)
+        print(result_df["ProjectName"].to_string(index=False))
 
     if args.export:
         result_df.to_csv(args.export, index=False)
