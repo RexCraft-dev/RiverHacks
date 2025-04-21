@@ -121,7 +121,7 @@ def export_tolist_results(df, output_file="output/list_results.txt", count=None)
 
     overall_df.index = overall_df.index + 1
     overall_df.index.name = "Rank"
-    sections.append("OVERALL RESULTS\n" +
+    sections.append("BEST OVERALL RESULTS\n" +
                     "-------------------------------------------------\n" +
                     overall_df.to_string())
     print("[BEST OVERALL] Data loaded successfully...")
@@ -152,6 +152,57 @@ def export_tolist_results(df, output_file="output/list_results.txt", count=None)
     print(f">> Exported combined results to {output_file} successfully...")
 
 
+def extract_contacts(df, project="all"):
+    df = df.rename(columns={"Project Name": "ProjectName"})
+
+    # Define the relevant columns for names and emails
+    contact_columns = [
+        ("Member 1 Name", "Member 1 Email"),
+        ("Member 2 Name", "Member 2 Email"),
+        ("Member 3 Name", "Member 3 Email"),
+        ("Member 4 Name", "Member 4 Email"),
+        ("Member 5 Name", "Member 5 Email")
+    ]
+
+    output_lines = []
+
+    # Determine which projects to process
+    if project.lower() == "all":
+        projects = df["ProjectName"].unique()
+        file_suffix = "all"
+    else:
+        if project not in df["ProjectName"].values:
+            print(f"[!] Project '{project}' not found.")
+            return
+        projects = [project]
+        file_suffix = project.replace(" ", "")
+
+    for proj in projects:
+        output_lines.append(proj)
+        output_lines.append("-" * 45)
+
+        row = df[df["ProjectName"] == proj].iloc[0]
+
+        for name_col, email_col in contact_columns:
+            name = str(row.get(name_col, "")).strip()
+            email = str(row.get(email_col, "")).strip()
+            if name or email:
+                output_lines.append(f"{name:<20} {email}")
+
+        output_lines.append("")  # Add space between projects
+
+    full_output = "\n".join(output_lines)
+
+    # Print to screen
+    print(full_output)
+
+    # Save to file
+    with open(f"output/contacts_{file_suffix}.txt", "w") as f:
+        f.write(full_output)
+
+    print(f">> Contacts saved to output/contacts_{file_suffix}.txt")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
     parser.add_argument("--file", required=True, help="Path to CSV file")
@@ -164,61 +215,68 @@ def main():
                         help="Export all track and overall results to CSV")
     parser.add_argument("--tolist", action="store_true",
                         help="Path to a text file to write combined overall and track results")
+    parser.add_argument("--contacts", help="Show list of participant's contact info")
 
     args = parser.parse_args()
 
-    # Load and process input data
-    df = load_data(f"data/{args.file}")
-    result_df = df
+    if args.contacts:
+        file_path = f"data/{args.file}"
+        df = pd.read_csv(file_path)
+        print(">> Parsing contact information...")
+        extract_contacts(df, args.contacts)
+    else:
+        # Load and process input data
+        df = load_data(f"data/{args.file}")
+        result_df = df
 
-    # Print overall rankings to console
-    if args.overall:
-        print(">> Parsing overall data...")
-        result_df = get_overall(df, include_overall=True)
-        print("Overall Results")
-        print("------------------------------------------------------------------------------------------------------")
-        print(result_df.to_string())
-
-    # Print selected track results to console
-    if args.track:
-        tracks = ["Best Overall", "Best Design", "Cybersecurity", "webAI",
-                  "Community Engagement", "Community Choice"]
-        print(f">> Parsing {tracks[args.track-1]} results...")
-        result_df = get_track(df, args.track)
-        print(f"Results for track: {tracks[args.track-1].upper()}")
-        print("------------------------------------------------------------------------------------------------------")
-        if args.count is not None:
-            print(result_df.head(args.count).to_string())
-        else:
+        # Print overall rankings to console
+        if args.overall:
+            print(">> Parsing overall data...")
+            result_df = get_overall(df, include_overall=True)
+            print("Overall Results")
+            print("------------------------------------------------------------------------------------------------------")
             print(result_df.to_string())
 
-    # Print list of suspected cheating projects
-    if args.cheat:
-        print(">> Parsing suspicious projects...")
-        result_df = get_cheat(df)
-        if not result_df.empty:
-            print("[FOUND] Suspicious projects found...")
-        print("\nSuspicious Projects")
-        print("------------------------------------------------------------------------------------------------------")
-        print(result_df["ProjectName"].to_string(index=False))
-        print()
+        # Print selected track results to console
+        if args.track:
+            tracks = ["Best Overall", "Best Design", "Cybersecurity", "webAI",
+                      "Community Engagement", "Community Choice"]
+            print(f">> Parsing {tracks[args.track-1]} results...")
+            result_df = get_track(df, args.track)
+            print(f"Results for track: {tracks[args.track-1].upper()}")
+            print("------------------------------------------------------------------------------------------------------")
+            if args.count is not None:
+                print(result_df.head(args.count).to_string())
+            else:
+                print(result_df.to_string())
 
-    # Export all results by track and overall in separate files
-    if args.exportall:
-        print(">> Exporting all result files...")
-        export_all_results(df, count=args.count)
-        print(">> All result files exported successfully")
+        # Print list of suspected cheating projects
+        if args.cheat:
+            print(">> Parsing suspicious projects...")
+            result_df = get_cheat(df)
+            if not result_df.empty:
+                print("[FOUND] Suspicious projects found...")
+            print("\nSuspicious Projects")
+            print("------------------------------------------------------------------------------------------------------")
+            print(result_df["ProjectName"].to_string(index=False))
+            print()
 
-    # Select specific file path for exporting data
-    elif args.export:
-        print(">> Exporting data...")
-        result_df.to_csv(f"output/{args.export}")
-        print(f">> Exported results to {args.export}")
+        # Export all results by track and overall in separate files
+        if args.exportall:
+            print(">> Exporting all result files...")
+            export_all_results(df, count=args.count)
+            print(">> All result files exported successfully")
 
-    # Exports all tracks into a single file
-    if args.tolist:
-        print(">> Parsing results...")
-        export_tolist_results(df, count=args.count)
+        # Select specific file path for exporting data
+        elif args.export:
+            print(">> Exporting data...")
+            result_df.to_csv(f"output/{args.export}")
+            print(f">> Exported results to {args.export}")
+
+        # Exports all tracks into a single file
+        if args.tolist:
+            print(">> Parsing results...")
+            export_tolist_results(df, count=args.count)
 
 
 if __name__ == "__main__":
