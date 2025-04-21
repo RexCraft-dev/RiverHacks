@@ -170,13 +170,11 @@ def extract_contacts(df, project="all"):
     # Determine which projects to process
     if project.lower() == "all":
         projects = df["ProjectName"].unique()
-        file_suffix = "list"
     else:
         if project not in df["ProjectName"].values:
             print(f"[!] Project '{project}' not found.")
             return
         projects = [project]
-        file_suffix = re.sub(r'[^A-Za-z0-9]', '', project)
 
     for proj in projects:
         output_lines.append(proj)
@@ -194,14 +192,13 @@ def extract_contacts(df, project="all"):
 
     full_output = "\n".join(output_lines)
 
-    # Print to screen
-    print(full_output)
+    return full_output
 
+
+def extract_text(src, file_suffix="list"):
     # Save to file
-    with open(f"output/contacts_{file_suffix}.txt", "w") as f:
-        f.write(full_output)
-
-    print(f">> Contacts saved to output/contacts_{file_suffix}.txt")
+    with open(f"output/contacts_{file_suffix}", "w") as f:
+        f.write(src)
 
 
 def main():
@@ -224,7 +221,15 @@ def main():
         file_path = f"data/{args.file}"
         df = pd.read_csv(file_path)
         print(">> Parsing contact information...")
-        extract_contacts(df, args.contacts)
+        result_text = extract_contacts(df, args.contacts)
+
+        if args.export:
+            extract_text(result_text, file_suffix=args.export)
+            file_suffix = re.sub(r'[^A-Za-z0-9]', '', args.export)
+            # Print to screen
+            print("\n" + result_text)
+            print(f"[EXPORT] File created successfully: contacts_{file_suffix}.txt")
+
     else:
         # Load and process input data
         df = load_data(f"data/{args.file}")
