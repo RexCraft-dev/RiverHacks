@@ -238,7 +238,7 @@ def main():
 
         # Print overall rankings to console
         if args.overall:
-            print(">> Parsing overall data...")
+            print("[LOADING] Parsing overall data...")
             result_df = get_overall(df, include_overall=True)
             print("Overall Results")
             print("---------------------------------------------------------------------------------------------------")
@@ -259,7 +259,7 @@ def main():
 
         # Print list of suspected cheating projects
         if args.cheat:
-            print(">> Parsing suspicious projects...")
+            print("[LOADING] Parsing suspicious projects...")
             result_df = get_cheat(df)
             if not result_df.empty:
                 print("[FOUND] Suspicious projects found...")
@@ -270,19 +270,19 @@ def main():
 
         # Export all results by track and overall in separate files
         if args.exportall:
-            print(">> Exporting all result files...")
+            print("[EXPORT] Exporting all result files...")
             export_all_results(df, count=args.count)
-            print(">> All result files exported successfully")
+            print("[SUCCESS] All result files exported successfully")
 
         # Select specific file path for exporting data
         elif args.export:
-            print(">> Exporting data...")
+            print("[EXPORT] Exporting data...")
             result_df.to_csv(f"output/{args.export}")
-            print(f">> Exported results to {args.export}")
+            print(f"[SUCCESS] Exported results to {args.export}")
 
         # Exports all tracks into a single file
         if args.tolist:
-            print(">> Parsing results...")
+            print("[LOADING] Parsing results...")
             export_tolist_results(df, count=args.count)
 
 
