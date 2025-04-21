@@ -1,85 +1,108 @@
-# Hackathon Score Processor
+# RiverHacks Score Parser
 
-This script processes and exports hackathon project scores from a CSV file. It supports overall and track-based rankings, suspected cheating detection, and various export formats.
+This Python script processes project scores and team contact data from CSV exports used in hackathons like RiverHacks. It supports category-based scoring, track-based filtering, data exports, and email contact listings.
 
 ## Features
 
-- Computes average project scores across four judging categories
-- Filters and ranks projects within specific judging tracks
-- Flags projects marked with suspected cheating
-- Outputs to separate `.txt` files by track or combined list
-- Supports CLI for filtering, ranking, and exporting
+- Parse and compute average scores from multiple judges
+- Filter by track or overall category
+- Print or export results to individual or combined files
+- List flagged "cheating" projects
+- Generate contact rosters for all or individual projects
 
-## Judging Categories
+---
 
-- Innovation
-- Value & Impact
-- Completeness
-- Technical Implementation
+## Setup
 
-## Judging Tracks
-
-- Best Overall
-- Best Design
-- Cybersecurity
-- webAI
-- Community Engagement
-- Community Choice
-
-## Requirements
-
+### Requirements
 - Python 3.7+
 - pandas
 
-Install dependencies:
+Install with:
 ```bash
 pip install -r requirements.txt
 ```
+
+### File Structure
+```
+project-root/
+├── data/
+│   └── your_input_file.csv
+├── output/
+│   ├── best_overall.txt
+│   ├── cybersecurity.txt
+│   └── contacts_all.txt
+└── script.py
+```
+
+CSV input files must be placed in the `data/` folder. All results are written to the `output/` folder.
+
+---
 
 ## Usage
 
 ### Required
 ```bash
-python script.py --file input.csv
+python script.py --file yourfile.csv
 ```
-(Note: The CSV file must be placed in the `data/` directory.)
 
 ### Options
-- `--overall` : Print ranked list of all projects
-- `--track [index]` : Show ranked list for a track (1–6)
-- `--cheat` : List all flagged projects for cheating
-- `--count [N]` : Limit result output to top N
-- `--export [filename.csv]` : Export the last result to CSV
-- `--exportall` : Export overall + track results to individual files in `output/`
-- `--tolist` : Export all results (overall + tracks) to one file: `output/list_results.txt`
+- `--overall` : Show top overall projects
+- `--track [index]` : Show results for a specific track (1–5)
+- `--count [N]` : Show only the top N results
+- `--cheat` : Show all projects flagged for cheating
+- `--export [filename.csv]` : Export last viewed results to CSV
+- `--exportall` : Export all rankings (overall + tracks) to individual files
+- `--tolist` : Export all rankings to a single text file
+- `--contacts [project|all]` : Generate contact list for one or all projects
 
 ### Example Commands
 
 Top 10 overall projects:
 ```bash
-python script.py --file scores.csv --overall --count 10
+python script.py --file projects.csv --overall --count 10
 ```
 
-Export everything to separate `.txt` files:
+Export all rankings to files in `/output`:
 ```bash
-python script.py --file scores.csv --exportall
+python script.py --file projects.csv --exportall
 ```
 
-Export a single merged list:
+Export all results to a single file:
 ```bash
-python script.py --file scores.csv --tolist
+python script.py --file projects.csv --tolist
 ```
 
-Display cybersecurity results:
+Show contacts for one project:
 ```bash
-python script.py --file scores.csv --track 3
+python script.py --file projects.csv --contacts "Project XYZ"
 ```
 
-## Output Behavior
-- Rankings are sorted from highest to lowest
-- Ranks begin at 1 for each list
-- Files are written to the `/output` folder
+Show all contacts:
+```bash
+python script.py --file projects.csv --contacts all
+```
+
+---
+
+## Tracks (by index)
+1. Best Design
+2. Cybersecurity
+3. webAI
+4. Community Engagement
+5. Community Choice
+
+---
+
+## Outputs
+
+- All ranked results are written to `.txt` files in `output/`
+- Rankings start at 1 and are sorted by average score descending
+- Contact files include project name and a table of team names/emails
+
+---
 
 ## License
 
 MIT License
+
