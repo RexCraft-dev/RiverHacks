@@ -1,0 +1,26 @@
+﻿FormID,Project Name (from Project),Judge Name,Innovation,Value & Impact,Completeness,Technical Implementation,Comments,Cheating,Track1,Track2
+37,Project A,Judge1,5,5,5,5,Great effort!,checked,Best Overall,Best Design
+42,Project A,Judge3,5,4,5,5,Needs refinement.,,Best Overall,Best Design
+50,Project A,Judge2,4,4,3,4,Needs refinement.,,Best Overall,Best Design
+58,Project A,Judge1,4,5,3,3,Needs refinement.,,Best Overall,Best Design
+39,Project B,Judge3,5,3,5,5,Great effort!,,Cybersecurity,webAI
+43,Project B,Judge1,4,4,5,4,Great effort!,,Cybersecurity,webAI
+59,Project B,Judge2,5,3,3,4,Great effort!,,Cybersecurity,webAI
+38,Project C,Judge2,3,5,3,4,Needs refinement.,,webAI,Community Choice
+51,Project C,Judge3,5,5,3,3,Great effort!,,webAI,Community Choice
+60,Project C,Judge3,5,4,5,3,Needs refinement.,,webAI,Community Choice
+40,Project D,Judge1,5,3,5,5,Needs refinement.,,Community Engagement,Best Overall
+41,Project D,Judge2,3,4,5,4,Great effort!,,Community Engagement,Best Overall
+61,Project D,Judge1,3,4,4,5,Great effort!,checked,Community Engagement,Best Overall
+45,Project E,Judge3,4,5,3,5,Great effort!,checked,Best Design,Community Engagement
+52,Project E,Judge1,5,4,4,3,Needs refinement.,,Best Design,Community Engagement
+44,Project F,Judge2,5,5,5,5,Needs refinement.,,Cybersecurity,Best Design
+53,Project F,Judge2,5,5,3,3,Great effort!,checked,Cybersecurity,Best Design
+46,Project G,Judge1,3,5,3,3,Needs refinement.,,webAI,Cybersecurity
+54,Project G,Judge3,4,3,3,4,Needs refinement.,,webAI,Cybersecurity
+47,Project H,Judge2,3,4,5,3,Great effort!,,Best Overall,webAI
+55,Project H,Judge1,3,3,3,5,Great effort!,,Best Overall,webAI
+48,Project I,Judge3,5,5,5,3,Needs refinement.,,Community Choice,Best Design
+56,Project I,Judge2,4,4,4,3,Needs refinement.,,Community Choice,Best Design
+49,Project J,Judge1,3,4,5,5,Great effort!,,Best Design,Community Choice
+57,Project J,Judge3,5,5,3,5,Great effort!,,Best Design,Community Choice

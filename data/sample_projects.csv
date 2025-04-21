@@ -1,26 +1,11 @@
-﻿FormID,Project Name (from Project),Judge Name,Innovation,Value & Impact,Completeness,Technical Implementation,Comments,Cheating,Track1,Track2
-37,Project A,Judge1,5,5,5,5,Great effort!,checked,Best Overall,Best Design
-42,Project A,Judge3,5,4,5,5,Needs refinement.,,Best Overall,Best Design
-50,Project A,Judge2,4,4,3,4,Needs refinement.,,Best Overall,Best Design
-58,Project A,Judge1,4,5,3,3,Needs refinement.,,Best Overall,Best Design
-39,Project B,Judge3,5,3,5,5,Great effort!,,Cybersecurity,webAI
-43,Project B,Judge1,4,4,5,4,Great effort!,,Cybersecurity,webAI
-59,Project B,Judge2,5,3,3,4,Great effort!,,Cybersecurity,webAI
-38,Project C,Judge2,3,5,3,4,Needs refinement.,,webAI,Community Choice
-51,Project C,Judge3,5,5,3,3,Great effort!,,webAI,Community Choice
-60,Project C,Judge3,5,4,5,3,Needs refinement.,,webAI,Community Choice
-40,Project D,Judge1,5,3,5,5,Needs refinement.,,Community Engagement,Best Overall
-41,Project D,Judge2,3,4,5,4,Great effort!,,Community Engagement,Best Overall
-61,Project D,Judge1,3,4,4,5,Great effort!,checked,Community Engagement,Best Overall
-45,Project E,Judge3,4,5,3,5,Great effort!,checked,Best Design,Community Engagement
-52,Project E,Judge1,5,4,4,3,Needs refinement.,,Best Design,Community Engagement
-44,Project F,Judge2,5,5,5,5,Needs refinement.,,Cybersecurity,Best Design
-53,Project F,Judge2,5,5,3,3,Great effort!,checked,Cybersecurity,Best Design
-46,Project G,Judge1,3,5,3,3,Needs refinement.,,webAI,Cybersecurity
-54,Project G,Judge3,4,3,3,4,Needs refinement.,,webAI,Cybersecurity
-47,Project H,Judge2,3,4,5,3,Great effort!,,Best Overall,webAI
-55,Project H,Judge1,3,3,3,5,Great effort!,,Best Overall,webAI
-48,Project I,Judge3,5,5,5,3,Needs refinement.,,Community Choice,Best Design
-56,Project I,Judge2,4,4,4,3,Needs refinement.,,Community Choice,Best Design
-49,Project J,Judge1,3,4,5,5,Great effort!,,Best Design,Community Choice
-57,Project J,Judge3,5,5,3,5,Great effort!,,Best Design,Community Choice
+﻿Project Name,Repository Link,Project Overview,Track Option 1,Track Option 2,Attachments (Optional),Member 1 Name,Member 1 Email,Member 2 Name,Member 2 Email,Member 3 Name,Member 3 Email,Member 4 Name,Member 4 Email,Member 5 Name,Member 5 Email,Innovation (from Judging),Value & Impact (from Judging),Completeness (from Judging),Technical Implementation (from Judging)
+Project A,https://github.com/user/project0,This is a demo project for scoring.,Best Overall,Best Design,,Member1,member1@example.com,Teammate1,teammate1@example.com,Support1,support1@example.com,Dev1,dev1@example.com,Extra1,extra1@example.com,"5, 5, 4, 4","5, 4, 4, 5","5, 5, 3, 3","5, 5, 4, 3"
+Project B,https://github.com/user/project1,This is a demo project for scoring.,Cybersecurity,webAI,,Member2,member2@example.com,Teammate2,teammate2@example.com,Support2,support2@example.com,Dev2,dev2@example.com,Extra2,extra2@example.com,"5, 4, 5","3, 4, 3","5, 5, 3","5, 4, 4"
+Project C,https://github.com/user/project2,This is a demo project for scoring.,webAI,Community Choice,,Member3,member3@example.com,Teammate3,teammate3@example.com,Support3,support3@example.com,Dev3,dev3@example.com,Extra3,extra3@example.com,"3, 5, 5","5, 5, 4","3, 3, 5","4, 3, 3"
+Project D,https://github.com/user/project3,This is a demo project for scoring.,Community Engagement,Best Overall,,Member4,member4@example.com,Teammate4,teammate4@example.com,Support4,support4@example.com,Dev4,dev4@example.com,Extra4,extra4@example.com,"5, 3, 3","3, 4, 4","5, 5, 4","5, 4, 5"
+Project E,https://github.com/user/project4,This is a demo project for scoring.,Best Design,Community Engagement,,Member5,member5@example.com,Teammate5,teammate5@example.com,Support5,support5@example.com,Dev5,dev5@example.com,Extra5,extra5@example.com,"4, 5","5, 4","3, 4","5, 3"
+Project F,https://github.com/user/project5,This is a demo project for scoring.,Cybersecurity,Best Design,,Member6,member6@example.com,Teammate6,teammate6@example.com,Support6,support6@example.com,Dev6,dev6@example.com,Extra6,extra6@example.com,"5, 5","5, 5","5, 3","5, 3"
+Project G,https://github.com/user/project6,This is a demo project for scoring.,webAI,Cybersecurity,,Member7,member7@example.com,Teammate7,teammate7@example.com,Support7,support7@example.com,Dev7,dev7@example.com,Extra7,extra7@example.com,"3, 4","5, 3","3, 3","3, 4"
+Project H,https://github.com/user/project7,This is a demo project for scoring.,Best Overall,webAI,,Member8,member8@example.com,Teammate8,teammate8@example.com,Support8,support8@example.com,Dev8,dev8@example.com,Extra8,extra8@example.com,"3, 3","4, 3","5, 3","3, 5"
+Project I,https://github.com/user/project8,This is a demo project for scoring.,Community Choice,Best Design,,Member9,member9@example.com,Teammate9,teammate9@example.com,Support9,support9@example.com,Dev9,dev9@example.com,Extra9,extra9@example.com,"5, 4","5, 4","5, 4","3, 3"
+Project J,https://github.com/user/project9,This is a demo project for scoring.,Best Design,Community Choice,,Member10,member10@example.com,Teammate10,teammate10@example.com,Support10,support10@example.com,Dev10,dev10@example.com,Extra10,extra10@example.com,"3, 5","4, 5","5, 3","5, 5"
