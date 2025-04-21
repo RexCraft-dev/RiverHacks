@@ -1,14 +1,14 @@
 # Hackathon Score Processor
 
-This script helps automate the scoring, ranking, and exporting of hackathon project evaluations based on CSV data. It supports calculating average scores across categories, viewing and exporting track-specific rankings, flagging potential cheaters, and producing formatted output in both CSV and plain text formats.
+This script processes and exports hackathon project scores from a CSV file. It supports overall and track-based rankings, suspected cheating detection, and various export formats.
 
 ## Features
 
-- Calculates average project scores across multiple judging categories
-- Supports filtering and exporting by individual judging tracks
-- Flags entries marked for suspected cheating
-- Exports ranked results in both individual and combined formats
-- CLI-based control for filtering, limiting, and formatting outputs
+- Computes average project scores across four judging categories
+- Filters and ranks projects within specific judging tracks
+- Flags projects marked with suspected cheating
+- Outputs to separate `.txt` files by track or combined list
+- Supports CLI for filtering, ranking, and exporting
 
 ## Judging Categories
 
@@ -17,8 +17,9 @@ This script helps automate the scoring, ranking, and exporting of hackathon proj
 - Completeness
 - Technical Implementation
 
-## Available Tracks
+## Judging Tracks
 
+- Best Overall
 - Best Design
 - Cybersecurity
 - webAI
@@ -31,7 +32,6 @@ This script helps automate the scoring, ranking, and exporting of hackathon proj
 - pandas
 
 Install dependencies:
-
 ```bash
 pip install -r requirements.txt
 ```
@@ -40,56 +40,45 @@ pip install -r requirements.txt
 
 ### Required
 ```bash
-python script.py --file path/to/data.csv
+python script.py --file input.csv
 ```
+(Note: The CSV file must be placed in the `data/` directory.)
 
-### Optional Flags
-
-- `--overall` - Print overall project rankings to the console
-- `--track [index]` - Show results for a specific track (use index from 1-5)
-- `--cheat` - Show projects marked with suspected cheating
-- `--count [N]` - Show only the top N projects in any output
-- `--export [filename.csv]` - Export the most recent results to a CSV
-- `--exportall` - Export overall and track rankings into separate `.txt` files
-- `--inline` - Export overall and all track results into one combined `.txt` file
+### Options
+- `--overall` : Print ranked list of all projects
+- `--track [index]` : Show ranked list for a track (1–6)
+- `--cheat` : List all flagged projects for cheating
+- `--count [N]` : Limit result output to top N
+- `--export [filename.csv]` : Export the last result to CSV
+- `--exportall` : Export overall + track results to individual files in `output/`
+- `--tolist` : Export all results (overall + tracks) to one file: `output/list_results.txt`
 
 ### Example Commands
 
-View top 5 projects overall:
+Top 10 overall projects:
 ```bash
-python script.py --file results.csv --overall --count 5
+python script.py --file scores.csv --overall --count 10
 ```
 
-Export each track and overall results to separate text files:
+Export everything to separate `.txt` files:
 ```bash
-python script.py --file results.csv --exportall --count 10
+python script.py --file scores.csv --exportall
 ```
 
-Export all rankings (top 10) to a single file:
+Export a single merged list:
 ```bash
-python script.py --file results.csv --inline --count 10
+python script.py --file scores.csv --tolist
 ```
 
-Show only projects suspected of cheating:
+Display cybersecurity results:
 ```bash
-python script.py --file results.csv --cheat
+python script.py --file scores.csv --track 3
 ```
 
-## Output
-- Rankings are sorted highest to lowest by overall average score
-- Rank numbers begin at 1 for each section
-- Results can be printed to console, saved per category, or saved inline to a single file
-
-## Example Outputs
-### Display Results
-![printresults](https://github.com/user-attachments/assets/c5980c67-4fed-4226-b250-936f97200582)
-
-
-### Saved File of Results
-![txtfile](https://github.com/user-attachments/assets/a3137924-13ea-4d8b-a713-1276c868dc60)
-
-
-
+## Output Behavior
+- Rankings are sorted from highest to lowest
+- Ranks begin at 1 for each list
+- Files are written to the `/output` folder
 
 ## License
 
