@@ -81,7 +81,7 @@ def export_all_results(df, count=None):
     overall_filename = f"output/best_overall.txt"
     print("[BEST OVERALL] Parsing results...")
 
-    if count is not None:
+    if count:
         overall_df = overall_df.head(count)
 
     with open(overall_filename, "w") as f:
@@ -102,7 +102,7 @@ def export_all_results(df, count=None):
         track_df.index.name = "Rank"
         track_filename = f"output/{track.replace(' ', '_').lower()}.txt"
 
-        if count is not None:
+        if count:
             track_df = track_df.head(count)
 
         with open(track_filename, "w") as f:
@@ -216,17 +216,17 @@ def main():
         else:
             list_results(df, count=args.count)
 
-    # Export all results by track and overall in separate files
-    elif args.exportall:
-        print("[EXPORT] Exporting all result files...")
-        export_all_results(df, count=args.count)
-        print("[SUCCESS] All result files exported successfully")
-
     # Select specific file path for exporting data
-    elif args.export:
+    if args.export and result_df:
         print("[EXPORT] Exporting data...")
         result_df.to_csv(f"output/{args.export}")
         print(f"[SUCCESS] Exported results to {args.export}")
+
+    # Export all results by track and overall in separate files
+    if args.exportall:
+        print("[EXPORT] Exporting all result files...")
+        export_all_results(df, count=args.count)
+        print("[SUCCESS] All result files exported successfully")
 
 
 if __name__ == "__main__":
