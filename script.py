@@ -70,7 +70,7 @@ def get_cheat(df):
     return df[df["Cheating"] == "checked"]
 
 
-def export_all_results(df, export_path=None, count=None):
+def export_all_results(df, count=None):
     # Export overall rankings
     overall_df = get_overall(df, include_overall=True)
     overall_df = overall_df[["ProjectName", "overall_rating"]]
@@ -78,14 +78,15 @@ def export_all_results(df, export_path=None, count=None):
     overall_df.index = overall_df.index + 1
     overall_df.index.name = "Rank"
     overall_filename = f"output/best_overall.txt"
-    print("[Best Overall] Parsing results...")
+    print("[BEST OVERALL] Parsing results...")
 
     if count is not None:
         overall_df = overall_df.head(count)
 
     with open(overall_filename, "w") as f:
         f.write(overall_df.to_string())
-    print(f">> Exported overall results to {overall_filename} successfully...")
+        print(f"[SUCCESS] Data written to file...")
+    print(f"[SUCCESS] Exported overall results to {overall_filename} successfully...")
 
     # Export each individual track
     tracks = ["Best Design", "Cybersecurity", "webAI",
@@ -105,7 +106,7 @@ def export_all_results(df, export_path=None, count=None):
 
         with open(track_filename, "w") as f:
             f.write(track_df.to_string())
-        print(f">> Exported {track} results to {track_filename} successfully...")
+        print(f"[SUCCESS] Exported {track} results to {track_filename} successfully...")
 
 
 def export_tolist_results(df, output_file="output/list_results.txt", count=None):
@@ -144,13 +145,13 @@ def export_tolist_results(df, output_file="output/list_results.txt", count=None)
                    "-------------------------------------------------\n" +
                    track_df.to_string())
         sections.append(section)
-        print(f"[{track.upper()}] Data loaded successfully...")
+        print(f"[SUCCESS] [{track.upper()}] Data loaded successfully...")
 
     # Write everything to one file
     with open(output_file, "w") as f:
         f.write("\n".join(sections))
 
-    print(f">> Exported combined results to {output_file} successfully...")
+    print(f"[EXPORT] Exported combined results to {output_file} successfully...")
 
 
 def extract_contacts(df, project="all"):
@@ -220,7 +221,7 @@ def main():
     if args.contacts:
         file_path = f"data/{args.file}"
         df = pd.read_csv(file_path)
-        print(">> Parsing contact information...")
+        print("[LOADING] Parsing contact information...")
         result_text = extract_contacts(df, args.contacts)
 
         if args.export:
