@@ -168,7 +168,7 @@ def main():
     args = parser.parse_args()
 
     # Load and process input data
-    df = load_data(args.file)
+    df = load_data(f"data/{args.file}")
     result_df = df
 
     # Print overall rankings to console
@@ -181,11 +181,11 @@ def main():
 
     # Print selected track results to console
     if args.track:
-        tracks = ["", "Best Overall", "Best Design", "Cybersecurity", "webAI",
+        tracks = ["Best Overall", "Best Design", "Cybersecurity", "webAI",
                   "Community Engagement", "Community Choice"]
-        print(f">> Parsing {tracks[args.track]} results...")
+        print(f">> Parsing {tracks[args.track-1]} results...")
         result_df = get_track(df, args.track)
-        print(f"Results for track: {tracks[args.track].upper()}")
+        print(f"Results for track: {tracks[args.track-1].upper()}")
         print("------------------------------------------------------------------------------------------------------")
         if args.count is not None:
             print(result_df.head(args.count).to_string())
@@ -212,7 +212,7 @@ def main():
     # Select specific file path for exporting data
     elif args.export:
         print(">> Exporting data...")
-        result_df.to_csv(args.export)
+        result_df.to_csv(f"output/{args.export}")
         print(f">> Exported results to {args.export}")
 
     # Exports all tracks into a single file
