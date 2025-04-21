@@ -43,7 +43,7 @@ CSV input files must be placed in the `data/` folder. All results are written to
 
 ### Required
 ```bash
-python script.py --file yourfile.csv
+python scores.py --file yourfile.csv
 ```
 
 ### Options
@@ -60,27 +60,27 @@ python script.py --file yourfile.csv
 
 Top 10 overall projects:
 ```bash
-python script.py --file projects.csv --overall --count 10
+python scores.py --file projects.csv --overall --count 10
 ```
 
 Export all rankings to files in `/output`:
 ```bash
-python script.py --file projects.csv --exportall
+python scores.py --file projects.csv --exportall
 ```
 
 Export all results to a single file:
 ```bash
-python script.py --file projects.csv --tolist
+python scores.py --file projects.csv --tolist
 ```
 
 Show contacts for one project:
 ```bash
-python script.py --file projects.csv --contacts "Project XYZ"
+python scores.py --file projects.csv --contacts "Project XYZ"
 ```
 
 Show all contacts:
 ```bash
-python script.py --file projects.csv --contacts all
+python scores.py --file projects.csv --contacts all
 ```
 
 ---
