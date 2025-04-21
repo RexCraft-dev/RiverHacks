@@ -1,5 +1,6 @@
 import pandas as pd
 import argparse
+import re
 
 
 def load_data(file):
@@ -169,13 +170,13 @@ def extract_contacts(df, project="all"):
     # Determine which projects to process
     if project.lower() == "all":
         projects = df["ProjectName"].unique()
-        file_suffix = "all"
+        file_suffix = "list"
     else:
         if project not in df["ProjectName"].values:
             print(f"[!] Project '{project}' not found.")
             return
         projects = [project]
-        file_suffix = project.replace(" ", "")
+        file_suffix = re.sub(r'[^A-Za-z0-9]', '', project)
 
     for proj in projects:
         output_lines.append(proj)
@@ -234,7 +235,7 @@ def main():
             print(">> Parsing overall data...")
             result_df = get_overall(df, include_overall=True)
             print("Overall Results")
-            print("------------------------------------------------------------------------------------------------------")
+            print("---------------------------------------------------------------------------------------------------")
             print(result_df.to_string())
 
         # Print selected track results to console
@@ -244,7 +245,7 @@ def main():
             print(f">> Parsing {tracks[args.track-1]} results...")
             result_df = get_track(df, args.track)
             print(f"Results for track: {tracks[args.track-1].upper()}")
-            print("------------------------------------------------------------------------------------------------------")
+            print("---------------------------------------------------------------------------------------------------")
             if args.count is not None:
                 print(result_df.head(args.count).to_string())
             else:
@@ -257,7 +258,7 @@ def main():
             if not result_df.empty:
                 print("[FOUND] Suspicious projects found...")
             print("\nSuspicious Projects")
-            print("------------------------------------------------------------------------------------------------------")
+            print("---------------------------------------------------------------------------------------------------")
             print(result_df["ProjectName"].to_string(index=False))
             print()
 
