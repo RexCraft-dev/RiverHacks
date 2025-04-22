@@ -1,5 +1,8 @@
 import pandas as pd
 import argparse
+import random
+from itertools import combinations
+from collections import defaultdict
 
 # Set float precision to 2 for scores
 pd.set_option("display.precision", 2)
@@ -58,6 +61,9 @@ def get_track(df, track, include_overall=True):
 
     # Filter entries where the project is in the selected track
     df = df[(df["Track1"] == tracks[track]) | (df["Track2"] == tracks[track])].copy()
+
+    if df.empty:
+        return pd.DataFrame()
 
     if include_overall:
         cols.append("Overall Score")
@@ -151,6 +157,10 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
         section = (f"\n{track.upper()} RESULTS\n" +
                    "-------------------------------------------------\n" +
                    track_df.to_string())
+        if track_df.empty:
+            section = (f"\n{track.upper()} RESULTS\n" +
+                       "-------------------------------------------------\n" +
+                       "No Entries")
         sections.append(section)
         print(f"[SUCCESS] [{track.upper()}] Data loaded successfully...")
 
@@ -165,6 +175,62 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
         print(f"[EXPORT] Exported combined results to {output_file} successfully...")
 
 
+def assign_tables():
+    # Load data
+    projects_df = pd.read_csv("data/sample_projects.csv")
+    with open("data/judges.txt", "r") as f:
+        judges = [line.strip() for line in f.readlines() if line.strip()]
+
+    project_names = projects_df["Project Name"].tolist()
+    min_judges_per_project = 3
+
+    # Track judge assignment counts
+    judge_counts = defaultdict(int)
+    assignments = []
+    used_combos = set()
+
+    # Helper function to get a sorted combo of least-assigned judges
+    def get_balanced_combo(judges, judge_counts, used_combos, k=3):
+        # Sort by current count (ascending)
+        sorted_judges = sorted(judges, key=lambda j: judge_counts[j])
+        combos = combinations(sorted_judges, k)
+        for combo in combos:
+            if tuple(sorted(combo)) not in used_combos:
+                return combo
+        return None  # fallback if no combo found
+
+    # Assign judges to each project in a balanced way
+    for i, project in enumerate(project_names, start=1):
+        combo = get_balanced_combo(judges, judge_counts, used_combos, k=min_judges_per_project)
+        if combo:
+            used_combos.add(tuple(sorted(combo)))
+            for judge in combo:
+                assignments.append({
+                    "Table Number": i,
+                    "Project Name": project,
+                    "Judge Name": judge
+                })
+                judge_counts[judge] += 1
+
+    # Format grouped output
+    assignment_df = pd.DataFrame(assignments)
+    grouped = assignment_df.groupby("Judge Name")
+
+    formatted_output = []
+    for judge, group in grouped:
+        formatted_output.append(judge)
+        formatted_output.append("--------------------------------")
+        formatted_output.append(f"Table      Project")
+        for _, row in group.iterrows():
+            formatted_output.append(f"{row['Table Number']:<10} {row['Project Name']}")
+        formatted_output.append("")
+
+    # Save to text file
+    output_txt_path = "output/judge_assignments.txt"
+    with open(output_txt_path, "w") as f:
+        f.write("\n".join(formatted_output))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
     parser.add_argument("--file", required=True, help="Path to CSV file")
@@ -176,13 +242,16 @@ def main():
     parser.add_argument("--exportall", action="store_true", help="Export all track and overall results to CSV")
     parser.add_argument("--list", action="store_true",
                         help="Path to a text file to write combined overall and track results")
-    # add project assignment
+    parser.add_argument("--assign", action="store_true", help="Assigns judges to projects for scoring")
 
     args = parser.parse_args()
 
     # Load and process input data
     df = load_data(f"data/{args.file}")
     result_df = None
+
+    if args.assign:
+        assign_tables()
 
     # Print overall rankings to console
     if args.overall:

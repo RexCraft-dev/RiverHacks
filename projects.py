@@ -91,6 +91,7 @@ def main():
     if args.projects:
         df = pd.read_csv(file_path)
         projects = list_projects(df)
+        print(projects)
 
 
 if __name__ == "__main__":
