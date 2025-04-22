@@ -13,7 +13,7 @@ def load_data(file):
     df = df.rename(columns={"Track Option 2 (from ProjectTable 4)": "Track2"})
 
     # Extract only the relevant columns for scoring and analysis
-    new_df = df[["ProjectName", "Innovation", "Value & Impact",
+    new_df = df[["ProjectName", "Judge Name", "Innovation", "Value & Impact",
                  "Completeness", "Technical Implementation",
                  "Track1", "Track2", "Cheating"]].copy()
 
@@ -231,9 +231,9 @@ def main():
         result_df = get_cheat(df)
         if not result_df.empty:
             print("[FOUND] Suspicious projects found...")
-        print("\nSuspicious Projects")
+        print("Suspicious Projects")
         print("---------------------------------------------------------------------------------------------------")
-        print(result_df["ProjectName"].to_string(index=False))
+        print(result_df[["ProjectName", "Judge Name"]].to_string(index=False))
         print()
 
     # Exports all tracks into a single file
