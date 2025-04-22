@@ -3,6 +3,18 @@ import argparse
 import re
 
 
+def list_projects(df):
+    projects = []
+    df = df.rename(columns={"Project Name": "ProjectName"})
+    df = df["ProjectName"].values
+    df_string = "\n".join(df)
+    projects.append("RIVERHACKS25 PROJECT SUBMISSIONS\n" +
+                    "-------------------------------------------------\n" +
+                    df_string)
+    projects = "\n".join(projects)
+    return projects
+
+
 def extract_contacts(df, project="all"):
     df = df.rename(columns={"Project Name": "ProjectName"})
 
@@ -56,11 +68,14 @@ def main():
     parser.add_argument("--file", required=True, help="Path to CSV file")
     parser.add_argument("--export", help="Export results to a CSV file")
     parser.add_argument("--contacts", help="Show list of participant's contact info")
+    parser.add_argument("--projects", action="store_true", help="Show list of all projects")
 
     args = parser.parse_args()
 
+    # CSV file path
+    file_path = f"data/{args.file}"
+
     if args.contacts:
-        file_path = f"data/{args.file}"
         df = pd.read_csv(file_path)
         print("[LOADING] Parsing contact information...")
         result_text = extract_contacts(df, args.contacts)
@@ -68,9 +83,14 @@ def main():
         if args.export:
             extract_text(result_text, file_suffix=args.export)
             file_suffix = re.sub(r'[^A-Za-z0-9]', '', args.export)
+
             # Print to screen
             print("\n" + result_text)
             print(f"[EXPORT] File created successfully: contacts_{file_suffix}.txt")
+
+    if args.projects:
+        df = pd.read_csv(file_path)
+        projects = list_projects(df)
 
 
 if __name__ == "__main__":

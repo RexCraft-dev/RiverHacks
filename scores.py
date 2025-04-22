@@ -1,6 +1,7 @@
 import pandas as pd
 import argparse
 
+# Set float precision to 2 for scores
 pd.set_option("display.precision", 2)
 
 
@@ -45,8 +46,15 @@ def get_overall(df, include_overall=True):
 def get_track(df, track, include_overall=True):
     # List of all valid track names (indexed)
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
-    tracks = ["Best Design", "Cybersecurity", "webAI",
-              "Community Engagement", "Community Choice"]
+    tracks = [
+        "Main Event",
+        "Disaster Response",
+        "Accessible City",
+        "Cybersecurity",
+        "webAI",
+        "Mobility Access",
+        "Public Safety Insights"
+    ]
 
     # Filter entries where the project is in the selected track
     df = df[(df["Track1"] == tracks[track]) | (df["Track2"] == tracks[track])].copy()
@@ -90,8 +98,15 @@ def export_all_results(df, count=None):
     print(f"[SUCCESS] Exported overall results to {overall_filename} successfully...")
 
     # Export each individual track
-    tracks = ["Best Design", "Cybersecurity", "webAI",
-              "Community Engagement", "Community Choice"]
+    tracks = [
+        "Main Event",
+        "Disaster Response",
+        "Accessible City",
+        "Cybersecurity",
+        "webAI",
+        "Mobility Access",
+        "Public Safety Insights"
+    ]
 
     for track in tracks:
         print(f"[{track.upper()}] Parsing results...")
@@ -130,7 +145,15 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
     print("[BEST OVERALL] Data loaded successfully...")
 
     # Tracks
-    tracks = ["Best Design", "Cybersecurity", "webAI", "Community Engagement", "Community Choice"]
+    tracks = [
+        "Main Event",
+        "Disaster Response",
+        "Accessible City",
+        "Cybersecurity",
+        "webAI",
+        "Mobility Access",
+        "Public Safety Insights"
+    ]
 
     for track in tracks:
         print(f"[{track.upper()}] Parsing data...")
@@ -169,6 +192,7 @@ def main():
     parser.add_argument("--exportall", action="store_true", help="Export all track and overall results to CSV")
     parser.add_argument("--list", action="store_true",
                         help="Path to a text file to write combined overall and track results")
+    # add project assignment
 
     args = parser.parse_args()
 
