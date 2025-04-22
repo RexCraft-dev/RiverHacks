@@ -1,7 +1,3 @@
-Great! Since there's a `requirements.txt` file, here's the revised `README.md` with the proper setup instructions and a cleaner structure:
-
----
-
 # RiverHacks25 Judging System
 
 This repository contains scripts to manage project data, assign judges, and analyze hackathon scoring for **RiverHacks25**.
