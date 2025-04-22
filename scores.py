@@ -128,22 +128,6 @@ def export_all_results(df, count=None):
 def list_results(df, output_file="output/list_results.txt", count=None, export=None):
     sections = []
 
-    # Overall section
-    print(f"[BEST OVERALL] Parsing data...")
-    overall_df = get_overall(df, include_overall=True)
-    overall_df = overall_df[["ProjectName", "Overall Score"]]
-    overall_df = overall_df.sort_values(by="Overall Score", ascending=False).reset_index(drop=True)
-
-    if count:
-        overall_df = overall_df.head(count)
-
-    overall_df.index = overall_df.index + 1
-    overall_df.index.name = "Rank"
-    sections.append("BEST OVERALL RESULTS\n" +
-                    "-------------------------------------------------\n" +
-                    overall_df.to_string())
-    print("[BEST OVERALL] Data loaded successfully...")
-
     # Tracks
     tracks = [
         "Main Event",
@@ -210,8 +194,15 @@ def main():
 
     # Print selected track results to console
     if args.track:
-        tracks = ["Best Overall", "Best Design", "Cybersecurity", "webAI",
-                  "Community Engagement", "Community Choice"]
+        tracks = [
+            "Main Event",
+            "Disaster Response",
+            "Accessible City",
+            "Cybersecurity",
+            "webAI",
+            "Mobility Access",
+            "Public Safety Insights"
+        ]
         print(f"[LOADING] Parsing {tracks[args.track-1]} results...")
         result_df = get_track(df, args.track)
         print(f"Results for track: {tracks[args.track-1].upper()}")
