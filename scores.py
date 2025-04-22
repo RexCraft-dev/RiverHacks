@@ -101,8 +101,8 @@ def export_all_results(df, count=None):
 
     with open(overall_filename, "w") as f:
         f.write(overall_df.to_string())
-        print(f"[SUCCESS] Data written to file...")
-    print(f"[SUCCESS] Exported overall results to {overall_filename} successfully...")
+        print(f"[-] Data written to file...")
+    print(f"[-] Exported overall results to {overall_filename} successfully...")
 
     # Export each individual track
     tracks = [
@@ -116,7 +116,7 @@ def export_all_results(df, count=None):
     ]
 
     for track in tracks:
-        print(f"[{track.upper()}] Parsing results...")
+        print(f"[-] Parsing results for track: {track.upper()}...")
         track_df = get_track(df, tracks.index(track))
         track_df = track_df[["ProjectName", "Overall Score"]]
         track_df = track_df.sort_values(by="Overall Score", ascending=False).reset_index(drop=True)
@@ -129,10 +129,10 @@ def export_all_results(df, count=None):
 
         with open(track_filename, "w") as f:
             f.write(track_df.to_string())
-        print(f"[SUCCESS] Exported {track} results to {track_filename} successfully...")
+        print(f"[-] Exported {track} results to {track_filename} successfully...")
 
 
-def list_results(df, output_file="output/list_results.txt", count=None, export=None):
+def list_results(df, count=None, export=None):
     sections = []
 
     # Tracks
@@ -147,7 +147,7 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
     ]
 
     for track in tracks:
-        print(f"[{track.upper()}] Parsing data...")
+        print(f"[-] Parsing data for track: {track.upper()}...")
         track_df = get_track(df, tracks.index(track))
         track_df = track_df[["ProjectName", "Overall Score"]]
         track_df = track_df.sort_values(by="Overall Score", ascending=False).reset_index(drop=True)
@@ -161,19 +161,23 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
         if track_df.empty:
             section = (f"\n{track.upper()} RESULTS\n" +
                        "-------------------------------------------------\n" +
-                       "No Entries")
+                       "No Entries\n")
         sections.append(section)
-        print(f"[SUCCESS] [{track.upper()}] Data loaded successfully...")
+        print(f"[-] [{track.upper()}] Data loaded successfully...")
 
     # Display all results
     sections = "\n".join(sections)
-    print("\n" + sections)
+
+    if export == "all":
+        output_file = "output/list_results.txt"
+    else:
+        output_file = f"output/{export}.txt"
 
     if export:
         # Write everything to one file
         with open(output_file, "w") as f:
             f.write(sections)
-        print(f"[EXPORT] Exported combined results to {output_file} successfully...")
+        print(f"[-] Exported combined results to {output_file} successfully...")
 
 
 def main():
@@ -191,19 +195,15 @@ def main():
     args = parser.parse_args()
 
     # Load and process input data
-
     file_path = f"data/{args.file}"
     df = load_data(file_path)
-    result_df = None
+    result_df = pd.DataFrame()
 
     # Print overall rankings to console
     if args.overall:
-        print("[LOADING] Parsing overall data...")
+        print("[-] Parsing overall data...")
         result_df = get_overall(df, args.count)
-        print(f"[SUCCESS] Overall data found...")
-        print("OVERALL RESULTS")
-        print("---------------------------------------------------------------------------------------------------")
-        print(result_df.to_string())
+        print(f"[-] Overall data found...")
 
     # Print selected track results to console
     if args.track:
@@ -216,45 +216,35 @@ def main():
             "Mobility Access",
             "Public Safety Insights"
         ]
-        print(f"[LOADING] Parsing {tracks[args.track-1]} results...")
+        print(f"[-] Parsing {tracks[args.track-1]} results...")
         result_df = get_track(df, args.track)
-        print(f"Results for track: {tracks[args.track-1].upper()}")
-        print("---------------------------------------------------------------------------------------------------")
-        if args.count is not None:
-            print(result_df.head(args.count).to_string())
-        else:
-            print(result_df.to_string())
 
     # Print list of suspected cheating projects
     if args.cheat:
-        print("[LOADING] Parsing suspicious projects...")
+        print("[-] Parsing suspicious projects...")
         result_df = get_cheat(df)
         if not result_df.empty:
-            print("[FOUND] Suspicious projects found...")
-        print("Suspicious Projects")
-        print("---------------------------------------------------------------------------------------------------")
-        print(result_df[["ProjectName", "Judge Name"]].to_string(index=False))
-        print()
+            print("[!] Suspicious projects found...")
 
     # Exports all tracks into a single file
     if args.list:
-        print("[LOADING] Parsing results...")
+        print("[-] Parsing results...")
         if args.export:
-            list_results(df, count=args.count, export=True)
+            list_results(df, count=args.count, export=args.export)
         else:
             list_results(df, count=args.count)
 
     # Select specific file path for exporting data
-    if args.export and result_df:
-        print("[EXPORT] Exporting data...")
+    if args.export and not result_df.empty:
+        print("[-] Exporting data...")
         result_df.to_csv(f"output/{args.export}")
-        print(f"[SUCCESS] Exported results to {args.export}")
+        print(f"[-] Exported results to {args.export}")
 
     # Export all results by track and overall in separate files
     if args.exportall:
-        print("[EXPORT] Exporting all result files...")
+        print("[-] Exporting all result files...")
         export_all_results(df, count=args.count)
-        print("[SUCCESS] All result files exported successfully")
+        print("[-] All result files exported successfully")
 
 
 if __name__ == "__main__":

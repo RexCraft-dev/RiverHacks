@@ -17,7 +17,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\data\scores.csv">
+        <entry key="\output\sample_scores.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
