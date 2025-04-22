@@ -15,7 +15,7 @@ def list_projects(df):
     return projects
 
 
-def extract_contacts(df, project="all"):
+def extract_contacts(df, project="."):
     df = df.rename(columns={"Project Name": "ProjectName"})
 
     # Define the relevant columns for names and emails
@@ -30,7 +30,7 @@ def extract_contacts(df, project="all"):
     output_lines = []
 
     # Determine which projects to process
-    if project.lower() == "all":
+    if project.lower() == ".":
         projects = df["ProjectName"].unique()
     else:
         if project not in df["ProjectName"].values:
@@ -57,10 +57,14 @@ def extract_contacts(df, project="all"):
     return full_output
 
 
-def extract_text(src, file_suffix="list"):
+def extract_text(src, file_suffix):
     # Save to file
-    with open(f"output/contacts_{file_suffix}", "w") as f:
-        f.write(src)
+    if file_suffix == ".":
+        with open(f"output/contacts_list", "w") as f:
+            f.write(src)
+    else:
+        with open(f"output/contacts_{file_suffix}", "w") as f:
+            f.write(src)
 
 
 def main():

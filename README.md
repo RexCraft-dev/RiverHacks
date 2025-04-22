@@ -60,27 +60,27 @@ python scores.py --file yourfile.csv
 
 Top 10 overall projects:
 ```bash
-python scores.py --file projects.csv --overall --count 10
+python scores.py --file projects_uneven.csv --overall --count 10
 ```
 
 Export all rankings to files in `/output`:
 ```bash
-python scores.py --file projects.csv --exportall
+python scores.py --file projects_uneven.csv --exportall
 ```
 
 Export all results to a single file:
 ```bash
-python scores.py --file projects.csv --tolist
+python scores.py --file projects_uneven.csv --tolist
 ```
 
 Show contacts for one project:
 ```bash
-python scores.py --file projects.csv --contacts "Project XYZ"
+python scores.py --file projects_uneven.csv --contacts "Project XYZ"
 ```
 
 Show all contacts:
 ```bash
-python scores.py --file projects.csv --contacts all
+python scores.py --file projects_uneven.csv --contacts all
 ```
 
 ---

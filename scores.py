@@ -50,7 +50,7 @@ def get_track(df, track, include_overall=True):
     # List of all valid track names (indexed)
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
     tracks = [
-        "Main Event",
+        "Main Track",
         "Disaster Response",
         "Accessible City",
         "Cybersecurity",
@@ -105,7 +105,7 @@ def export_all_results(df, count=None):
 
     # Export each individual track
     tracks = [
-        "Main Event",
+        "Main Track",
         "Disaster Response",
         "Accessible City",
         "Cybersecurity",
@@ -136,7 +136,7 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
 
     # Tracks
     tracks = [
-        "Main Event",
+        "Main Track",
         "Disaster Response",
         "Accessible City",
         "Cybersecurity",
@@ -175,14 +175,13 @@ def list_results(df, output_file="output/list_results.txt", count=None, export=N
         print(f"[EXPORT] Exported combined results to {output_file} successfully...")
 
 
-def assign_tables():
+def assign_tables(projects_df, count=3):
     # Load data
-    projects_df = pd.read_csv("data/sample_projects.csv")
     with open("data/judges.txt", "r") as f:
         judges = [line.strip() for line in f.readlines() if line.strip()]
 
     project_names = projects_df["Project Name"].tolist()
-    min_judges_per_project = 3
+    k = count
 
     # Track judge assignment counts
     judge_counts = defaultdict(int)
@@ -190,7 +189,7 @@ def assign_tables():
     used_combos = set()
 
     # Helper function to get a sorted combo of least-assigned judges
-    def get_balanced_combo(judges, judge_counts, used_combos, k=3):
+    def get_balanced_combo(judges, judge_counts, used_combos, k):
         # Sort by current count (ascending)
         sorted_judges = sorted(judges, key=lambda j: judge_counts[j])
         combos = combinations(sorted_judges, k)
@@ -201,7 +200,7 @@ def assign_tables():
 
     # Assign judges to each project in a balanced way
     for i, project in enumerate(project_names, start=1):
-        combo = get_balanced_combo(judges, judge_counts, used_combos, k=min_judges_per_project)
+        combo = get_balanced_combo(judges, judge_counts, used_combos, k=k)
         if combo:
             used_combos.add(tuple(sorted(combo)))
             for judge in combo:
@@ -225,10 +224,14 @@ def assign_tables():
             formatted_output.append(f"{row['Table Number']:<10} {row['Project Name']}")
         formatted_output.append("")
 
+    output = "\n".join(formatted_output)
+
     # Save to text file
     output_txt_path = "output/judge_assignments.txt"
     with open(output_txt_path, "w") as f:
-        f.write("\n".join(formatted_output))
+        f.write(output)
+
+    return output
 
 
 def main():
@@ -247,24 +250,35 @@ def main():
     args = parser.parse_args()
 
     # Load and process input data
-    df = load_data(f"data/{args.file}")
+    df = pd.DataFrame()
     result_df = None
+    file_path = f"data/{args.file}"
+    if not args.assign:
+        df = load_data(file_path)
+    else:
+        df = pd.read_csv(file_path)
 
     if args.assign:
-        assign_tables()
+        print("[LOADING] Parsing project data...")
+        df = pd.read_csv(file_path)
+        result_text = assign_tables(df)
+        print(f"[SUCCESS] Judge assignment file saved successfully...")
+        print("JUDGE ASSIGNMENTS")
+        print("---------------------------------------------------------------------------------------------------\n")
+        print(result_text)
 
     # Print overall rankings to console
     if args.overall:
         print("[LOADING] Parsing overall data...")
         result_df = get_overall(df)
-        print("Overall Results")
+        print("OVERALL RESULTS")
         print("---------------------------------------------------------------------------------------------------")
         print(result_df.to_string())
 
     # Print selected track results to console
     if args.track:
         tracks = [
-            "Main Event",
+            "Main Track",
             "Disaster Response",
             "Accessible City",
             "Cybersecurity",
