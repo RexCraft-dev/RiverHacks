@@ -23,7 +23,7 @@ def load_data(file):
     return new_df
 
 
-def get_overall(df, include_overall=True):
+def get_overall(df, count=None, include_overall=True):
     # Prepare the list of columns to average
     cols = ["Innovation", "Value & Impact", "Completeness", "Technical Implementation"]
     if include_overall:
@@ -39,6 +39,9 @@ def get_overall(df, include_overall=True):
 
     if include_overall:
         grouped = grouped.sort_values(by="Overall Score", ascending=False)
+
+    if count:
+        grouped = grouped.head(count)
 
     return grouped
 
@@ -79,7 +82,8 @@ def get_track(df, track, include_overall=True):
 
 def get_cheat(df):
     # Return only projects flagged as cheating
-    return df[df["Cheating"] == "checked"]
+    new_df = df[df["Cheating"] == "checked"]
+    return new_df[["ProjectName", "Judge Name"]]
 
 
 def export_all_results(df, count=None):
@@ -195,7 +199,8 @@ def main():
     # Print overall rankings to console
     if args.overall:
         print("[LOADING] Parsing overall data...")
-        result_df = get_overall(df)
+        result_df = get_overall(df, args.count)
+        print(f"[SUCCESS] Overall data found...")
         print("OVERALL RESULTS")
         print("---------------------------------------------------------------------------------------------------")
         print(result_df.to_string())
