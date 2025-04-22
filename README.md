@@ -69,7 +69,7 @@ Outputs a formatted judge table list to `output/judge_assignments.txt`.
 ### Overall Rankings
 
 ```bash
-python scores.py --file judging.csv --overall
+python scores.py --file scores.csv --overall
 ```
 
 ---
@@ -77,7 +77,7 @@ python scores.py --file judging.csv --overall
 ### Track Rankings
 
 ```bash
-python scores.py --file judging.csv --track 4 --count 5
+python scores.py --file scores.csv --track 4 --count 5
 ```
 
 Track Index Reference:
@@ -96,7 +96,7 @@ Track Index Reference:
 ### Export All Rankings (One File Per Track)
 
 ```bash
-python scores.py --file judging.csv --exportall
+python scores.py --file scores.csv --exportall
 ```
 
 ---
@@ -104,7 +104,7 @@ python scores.py --file judging.csv --exportall
 ### Export Summary of All Track Results (Single File)
 
 ```bash
-python scores.py --file judging.csv --list --export
+python scores.py --file scores.csv --list --export
 ```
 
 ---
@@ -112,7 +112,7 @@ python scores.py --file judging.csv --list --export
 ### View Suspected Cheating Submissions
 
 ```bash
-python scores.py --file judging.csv --cheat
+python scores.py --file scores.csv --cheat
 ```
 
 ---
