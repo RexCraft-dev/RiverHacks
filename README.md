@@ -20,7 +20,7 @@ pip install -r requirements.txt
 data/
 ├── projects.csv         # Project submissions
 ├── judges.txt           # List of judges (one per line)
-├── judging.csv          # Judging results (one row per judge per project)
+├── scores.csv          # Judging results (one row per judge per project)
 
 output/
 ├── *.txt                # Generated judging results and contact exports
