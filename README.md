@@ -1,109 +1,127 @@
-# RiverHacks Score Parser
-
-This Python script processes project scores and team contact data from CSV exports used in hackathons like RiverHacks. It supports category-based scoring, track-based filtering, data exports, and email contact listings.
-
-## Features
-
-- Parse and compute average scores from multiple judges
-- Filter by track or overall category
-- Print or export results to individual or combined files
-- List flagged "cheating" projects
-- Generate contact rosters for all or individual projects
+Great! Since there's a `requirements.txt` file, here's the revised `README.md` with the proper setup instructions and a cleaner structure:
 
 ---
 
-## Setup
+# RiverHacks25 Judging System
 
-### Requirements
-- Python 3.7+
-- pandas
+This repository contains scripts to manage project data, assign judges, and analyze hackathon scoring for **RiverHacks25**.
 
-Install with:
+---
+
+## Requirements
+
+Install all dependencies with:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### File Structure
-```
-project-root/
-├── data/
-│   └── your_input_file.csv
-├── output/
-│   ├── best_overall.txt
-│   ├── cybersecurity.txt
-│   └── contacts_all.txt
-└── script.py
-```
-
-CSV input files must be placed in the `data/` folder. All results are written to the `output/` folder.
-
 ---
 
-## Usage
+## File Structure
 
-### Required
-```bash
-python scores.py --file yourfile.csv
 ```
+data/
+├── projects.csv         # Project submissions
+├── judges.txt           # List of judges (one per line)
+├── judging.csv          # Judging results (one row per judge per project)
 
-### Options
-- `--overall` : Show top overall projects
-- `--track [index]` : Show results for a specific track (1–5)
-- `--count [N]` : Show only the top N results
-- `--cheat` : Show all projects flagged for cheating
-- `--export [filename.csv]` : Export last viewed results to CSV
-- `--exportall` : Export all rankings (overall + tracks) to individual files
-- `--tolist` : Export all rankings to a single text file
-- `--contacts [project|all]` : Generate contact list for one or all projects
+output/
+├── *.txt                # Generated judging results and contact exports
 
-### Example Commands
-
-Top 10 overall projects:
-```bash
-python scores.py --file projects_uneven.csv --overall --count 10
-```
-
-Export all rankings to files in `/output`:
-```bash
-python scores.py --file projects_uneven.csv --exportall
-```
-
-Export all results to a single file:
-```bash
-python scores.py --file projects_uneven.csv --tolist
-```
-
-Show contacts for one project:
-```bash
-python scores.py --file projects_uneven.csv --contacts "Project XYZ"
-```
-
-Show all contacts:
-```bash
-python scores.py --file projects_uneven.csv --contacts all
+projects.py              # For assigning judges and viewing project/contact info
+scores.py                # For scoring, rankings, and exporting results
+requirements.txt         # Python dependencies
 ```
 
 ---
 
-## Tracks (by index)
-1. Best Overall
-2. Best Design
-3. Cybersecurity
-4. webAI
-5. Community Engagement
-6. Community Choice
+## Commands
+
+### List All Submitted Projects
+
+```bash
+python projects.py --file projects.csv --projects
+```
 
 ---
 
-## Outputs
+### Extract Contact Info
 
-- All ranked results are written to `.txt` files in `output/`
-- Rankings start at 1 and are sorted by average score descending
-- Contact files include project name and a table of team names/emails
+```bash
+# Single project
+python projects.py --file projects.csv --contacts "Project 1"
+
+# All projects
+python projects.py --file projects.csv --contacts "." --export list
+```
 
 ---
 
-## License
+### Assign Judges to Teams (Balanced, Non-Repeating)
 
-MIT License
+```bash
+python projects.py --file projects.csv --assign
+```
 
+Outputs a formatted judge table list to `output/judge_assignments.txt`.
+
+---
+
+## Scoring and Results
+
+### Overall Rankings
+
+```bash
+python scores.py --file judging.csv --overall
+```
+
+---
+
+### Track Rankings
+
+```bash
+python scores.py --file judging.csv --track 4 --count 5
+```
+
+Track Index Reference:
+```
+1 - Main Track
+2 - Disaster Response
+3 - Accessible City
+4 - Cybersecurity
+5 - webAI
+6 - Mobility Access
+7 - Public Safety Insights
+```
+
+---
+
+### Export All Rankings (One File Per Track)
+
+```bash
+python scores.py --file judging.csv --exportall
+```
+
+---
+
+### Export Summary of All Track Results (Single File)
+
+```bash
+python scores.py --file judging.csv --list --export
+```
+
+---
+
+### View Suspected Cheating Submissions
+
+```bash
+python scores.py --file judging.csv --cheat
+```
+
+---
+
+## Notes
+
+- If your CSV columns differ, adjust the renaming section in `load_data()` in `scores.py`.
+- All output files will be written to the `output/` directory.
