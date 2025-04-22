@@ -1,6 +1,9 @@
 import pandas as pd
 import argparse
 import re
+import random
+from itertools import combinations
+from collections import defaultdict
 
 
 def list_projects(df):
@@ -57,6 +60,65 @@ def extract_contacts(df, project="."):
     return full_output
 
 
+def assign_tables(projects_df, count=3):
+    # Load data
+    with open("data/judges.txt", "r") as f:
+        judges = [line.strip() for line in f.readlines() if line.strip()]
+
+    project_names = projects_df["Project Name"].tolist()
+    k = count
+
+    # Track judge assignment counts
+    judge_counts = defaultdict(int)
+    assignments = []
+    used_combos = set()
+
+    # Helper function to get a sorted combo of least-assigned judges
+    def get_balanced_combo(judges, judge_counts, used_combos, k):
+        # Sort by current count (ascending)
+        sorted_judges = sorted(judges, key=lambda j: judge_counts[j])
+        combos = combinations(sorted_judges, k)
+        for combo in combos:
+            if tuple(sorted(combo)) not in used_combos:
+                return combo
+        return None  # fallback if no combo found
+
+    # Assign judges to each project in a balanced way
+    for i, project in enumerate(project_names, start=1):
+        combo = get_balanced_combo(judges, judge_counts, used_combos, k=k)
+        if combo:
+            used_combos.add(tuple(sorted(combo)))
+            for judge in combo:
+                assignments.append({
+                    "Table Number": i,
+                    "Project Name": project,
+                    "Judge Name": judge
+                })
+                judge_counts[judge] += 1
+
+    # Format grouped output
+    assignment_df = pd.DataFrame(assignments)
+    grouped = assignment_df.groupby("Judge Name")
+
+    formatted_output = []
+    for judge, group in grouped:
+        formatted_output.append(judge)
+        formatted_output.append("--------------------------------")
+        formatted_output.append(f"Table      Project")
+        for _, row in group.iterrows():
+            formatted_output.append(f"{row['Table Number']:<10} {row['Project Name']}")
+        formatted_output.append("")
+
+    output = "\n".join(formatted_output)
+
+    # Save to text file
+    output_txt_path = "output/judge_assignments.txt"
+    with open(output_txt_path, "w") as f:
+        f.write(output)
+
+    return output
+
+
 def extract_text(src, file_suffix):
     # Save to file
     if file_suffix == ".":
@@ -73,11 +135,21 @@ def main():
     parser.add_argument("--export", help="Export results to a CSV file")
     parser.add_argument("--contacts", help="Show list of participant's contact info")
     parser.add_argument("--projects", action="store_true", help="Show list of all projects")
+    parser.add_argument("--assign", action="store_true", help="Assigns judges to projects for scoring")
 
     args = parser.parse_args()
 
     # CSV file path
     file_path = f"data/{args.file}"
+
+    if args.assign:
+        print("[LOADING] Parsing project data...")
+        df = pd.read_csv(file_path)
+        result_text = assign_tables(df)
+        print(f"[SUCCESS] Judge assignment file saved successfully...")
+        print("JUDGE ASSIGNMENTS")
+        print("---------------------------------------------------------------------------------------------------\n")
+        print(result_text)
 
     if args.contacts:
         df = pd.read_csv(file_path)
