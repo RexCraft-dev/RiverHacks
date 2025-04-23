@@ -1,7 +1,7 @@
 
-# RiverHacks2025 – Judging and Project Tools
+# RiverHacks25 – Judging and Project Tools
 
-This repository contains the judging system, project processing tools, and Airtable integration scripts for RiverHacks2025. It supports CSV-based scoring, participant contact extraction, and automated result exports for each track.
+This repository contains the judging system, project processing tools, and Airtable integration scripts for RiverHacks25. It supports CSV-based scoring, participant contact extraction, and automated result exports for each track.
 
 ## Project Structure
 
