@@ -86,7 +86,32 @@ run_scores.bat
 
 This will generate track-specific rankings and overall results in the `output/` directory.
 
-## Other Commands
+## Command-Line Arguments Reference
+
+### `projects.py` Options
+
+| Argument      | Description                                                        |
+|---------------|--------------------------------------------------------------------|
+| `--file`      | Path to the `projects.csv` file                                    |
+| `--projects`  | Lists all submitted project names                                  |
+| `--contacts`  | Extracts contact information for a specific project or all (`"."`) |
+| `--export`    | Export contacts to a file (used with `--contacts`)                 |
+| `--assign`    | Assigns judges to projects (minimum 3 per team, balanced)          |
+
+### `scores.py` Options
+
+| Argument       | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `--file`       | Path to the `scores.csv` file                                               |
+| `--overall`    | Display overall ranked results                                              |
+| `--count`      | Limit output to top N results                                               |
+| `--track`      | Filter and display results for a specific track (1–7)                       |
+| `--cheat`      | Show all projects flagged as cheating                                       |
+| `--export`     | Export results to a specific file (used with `--overall`, `--track`, or `--cheat`) |
+| `--exportall`  | Export rankings for each track and overall to the `output/` folder          |
+| `--list`       | Print combined results by track                                             |
+
+## Command Examples
 
 **View contacts from a specific project or all projects:**
 
