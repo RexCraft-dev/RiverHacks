@@ -3,7 +3,7 @@ cd /d "%~dp0"
 call venv\\Scripts\\activate
 
 echo [SCRIPT] Fetching table data...
-python fetch_tables.py
+python fetch_tables.py --projects --judges
 
 echo [SCRIPT] Extracting projects...
 python projects.py --file projects.csv --projects
