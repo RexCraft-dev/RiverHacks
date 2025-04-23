@@ -92,7 +92,7 @@ This will generate track-specific rankings and overall results in the `output/` 
 
 | Argument      | Description                                                        |
 |---------------|--------------------------------------------------------------------|
-| `--file`      | Path to the `projects.csv` file                                    |
+| `--file`      | Path to the `projects.csv` file (Required)                         |
 | `--projects`  | Lists all submitted project names                                  |
 | `--contacts`  | Extracts contact information for a specific project or all (`"."`) |
 | `--export`    | Export contacts to a file (used with `--contacts`)                 |
@@ -102,7 +102,7 @@ This will generate track-specific rankings and overall results in the `output/` 
 
 | Argument       | Description                                                                 |
 |----------------|-----------------------------------------------------------------------------|
-| `--file`       | Path to the `scores.csv` file                                               |
+| `--file`       | Path to the `scores.csv` file (Required)                                    |
 | `--overall`    | Display overall ranked results                                              |
 | `--count`      | Limit output to top N results                                               |
 | `--track`      | Filter and display results for a specific track (1–7)                       |
