@@ -31,13 +31,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\output\sample_scores.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
       </map>
     </option>
   </component>
