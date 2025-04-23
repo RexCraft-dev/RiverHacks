@@ -1,5 +1,5 @@
 @echo off
-cd /d "%~dp0"
+cd ..
 python -m venv venv
 call venv\\Scripts\\activate
 
