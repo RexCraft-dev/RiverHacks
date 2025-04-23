@@ -83,7 +83,7 @@ def get_track(df, track, include_overall=True):
 def get_cheat(df):
     # Return only projects flagged as cheating
     new_df = df[df["Cheating"] == "checked"]
-    return new_df[["ProjectName", "Judge Name"]]
+    return new_df["ProjectName"]
 
 
 def export_all_results(df, count=None):
@@ -94,7 +94,7 @@ def export_all_results(df, count=None):
     overall_df.index = overall_df.index + 1
     overall_df.index.name = "Rank"
     overall_filename = f"output/best_overall.txt"
-    print("[BEST OVERALL] Parsing results...")
+    print("[-] Parsing results for BEST OVERALL...")
 
     if count:
         overall_df = overall_df.head(count)
@@ -237,8 +237,19 @@ def main():
     # Select specific file path for exporting data
     if args.export and not result_df.empty:
         print("[-] Exporting data...")
-        result_df.to_csv(f"output/{args.export}")
-        print(f"[-] Exported results to {args.export}")
+
+        # Ensure file has .txt extension
+        export_path = args.export
+        if not export_path.endswith(".txt"):
+            export_path = f"{export_path}.txt"
+
+        export_file = f"output/{export_path}"
+
+        # Write nicely formatted text output
+        with open(export_file, "w") as f:
+            f.write(result_df.to_string(index=True))
+
+        print(f"[-] Exported results to {export_file}")
 
     # Export all results by track and overall in separate files
     if args.exportall:

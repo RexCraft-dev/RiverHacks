@@ -7,15 +7,18 @@ from collections import defaultdict
 
 
 def list_projects(df):
-    projects = []
-    df = df.rename(columns={"Project Name": "ProjectName"})
-    df = df["ProjectName"].values
-    df_string = "\n".join(df)
-    projects.append("RIVERHACKS25 PROJECT SUBMISSIONS\n" +
-                    "-------------------------------------------------\n" +
-                    df_string)
-    projects = "\n".join(projects)
-    return projects
+    df = df[["Project Name"]].copy()
+    df.index += 1  # Start tables at 1 instead of 0
+    df.index.name = "Table"
+
+    lines = ["RIVERHACKS25 PROJECT SUBMISSIONS",
+             "-------------------------------------------------",
+             "Table   Project"]
+
+    for idx, row in df.iterrows():
+        lines.append(f"{idx:<8}{row['Project Name']}")
+
+    return "\n".join(lines)
 
 
 def extract_contacts(df, project="."):
@@ -40,6 +43,8 @@ def extract_contacts(df, project="."):
             print(f"[!] Project '{project}' not found.")
             return
         projects = [project]
+
+    df = df.fillna("")
 
     for proj in projects:
         output_lines.append(proj)
@@ -122,13 +127,15 @@ def assign_tables(projects_df, count=3):
     return output
 
 
-def extract_text(src, file_suffix):
+def save_contacts(src, file_suffix):
+
     # Save to file
     if file_suffix == ".":
-        with open(f"output/contacts_list", "w") as f:
+        with open(f"output/contacts_list.txt", "w") as f:
             f.write(src)
     else:
-        with open(f"output/contacts_{file_suffix}", "w") as f:
+        file_suffix = re.sub(r'[^A-Za-z0-9]', '', file_suffix)
+        with open(f"output/contacts_{file_suffix}.txt", "w") as f:
             f.write(src)
 
 
@@ -155,13 +162,11 @@ def main():
         df = pd.read_csv(file_path)
         print("[-] Parsing contact information...")
         result_text = extract_contacts(df, args.contacts)
+        print("[-] Contacts saved successfully...")
 
         if args.export:
-            extract_text(result_text, file_suffix=args.export)
+            save_contacts(result_text, file_suffix=args.export)
             file_suffix = re.sub(r'[^A-Za-z0-9]', '', args.export)
-
-            # Print to screen
-            print("\n" + result_text)
             print(f"[-] File created successfully: contacts_{file_suffix}.txt")
 
     if args.projects:
