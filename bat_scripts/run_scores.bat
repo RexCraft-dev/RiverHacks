@@ -1,9 +1,7 @@
 @echo off
 cd /d "%~dp0"
+python -m venv venv
 call venv\\Scripts\\activate
-
-echo "Updating table data..."
-python fetch_tables.py
 python scores.py --file scores.csv --overall --export overall_scores.txt
 python scores.py --file scores.csv --exportall
 python scores.py --file scores.csv --list --export all

@@ -66,7 +66,7 @@ def extract_contacts(df, project="."):
 
 
 def assign_tables(projects_df, count=3):
-    print("[-] Loading project files...")
+    print("[*] Loading project files...")
 
     # Load data
     with open("data/judges.txt", "r") as f:
@@ -122,7 +122,7 @@ def assign_tables(projects_df, count=3):
     output_txt_path = "output/judge_assignments.txt"
     with open(output_txt_path, "w") as f:
         f.write(output)
-    print(f"[✓] Judges assigned to projects successfully...")
+    print(f"[-] Judges assigned to projects successfully...")
 
     return output
 
@@ -153,29 +153,29 @@ def main():
     file_path = f"data/{args.file}"
 
     if args.assign:
-        print("[-] Parsing project data...")
+        print("[*] Parsing project data...")
         df = pd.read_csv(file_path)
         result_text = assign_tables(df)
-        print(f"[✓] Judge assignment file saved successfully...")
+        print(f"[-] Judge assignment file saved successfully...")
 
     if args.contacts:
         df = pd.read_csv(file_path)
-        print("[-] Parsing contact information...")
+        print("[*] Parsing contact information...")
         result_text = extract_contacts(df, args.contacts)
-        print("[✓] Contacts saved successfully...")
+        print("[-] Contacts saved successfully...")
 
         if args.export:
             save_contacts(result_text, file_suffix=args.export)
             file_suffix = re.sub(r'[^A-Za-z0-9]', '', args.export)
-            print(f"[✓] File created successfully: contacts_{file_suffix}.txt")
+            print(f"[-] File created successfully: contacts_{file_suffix}.txt")
 
     if args.projects:
-        print("[-] Loading project data...")
+        print("[*] Loading project data...")
         df = pd.read_csv(file_path)
         projects = list_projects(df)
         with open("output/projects_list.txt", "w") as f:
             f.write(projects)
-        print(f"[✓] List of projects saved successfully...")
+        print(f"[-] List of projects saved successfully...")
 
 
 if __name__ == "__main__":

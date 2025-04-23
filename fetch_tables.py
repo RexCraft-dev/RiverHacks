@@ -1,4 +1,3 @@
-
 import os
 import requests
 import pandas as pd
@@ -44,15 +43,15 @@ def fetch_airtable_table(table_name):
 
 
 def main():
-    print("[*] Fetching ProjectTable...")
+    print("[*] Fetching ProjectTable from Airtable...")
     projects_df = fetch_airtable_table(PROJECT_TABLE)
     projects_df.to_csv("data/projects.csv", index=False)
-    print("[✓] Saved as projects.csv")
+    print("[-] Saved as projects.csv")
 
-    print("[*] Fetching JudgingTable...")
+    print("[*] Fetching JudgingTable from Airtable...")
     judging_df = fetch_airtable_table(JUDGING_TABLE)
     judging_df.to_csv("data/scores.csv", index=False)
-    print("[✓] Saved as scores.csv")
+    print("[-] Saved as scores.csv")
 
 
 if __name__ == "__main__":

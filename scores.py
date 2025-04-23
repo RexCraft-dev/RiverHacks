@@ -104,7 +104,7 @@ def get_cheat(df):
 
 
 def export_all_results(df, count=None):
-    print("[-] Parsing results for BEST OVERALL...")
+    print("[*] Parsing results for BEST OVERALL...")
     overall_df = get_overall(df, include_overall=True)
 
     if not overall_df.empty and "ProjectName" in overall_df.columns and "Overall Score" in overall_df.columns:
@@ -117,7 +117,7 @@ def export_all_results(df, count=None):
         overall_filename = "output/best_overall.txt"
         with open(overall_filename, "w") as f:
             f.write(overall_df.to_string())
-        print(f"[✓] Exported overall results to {overall_filename} successfully...")
+        print(f"[-] Exported overall results to {overall_filename} successfully...")
     else:
         print("[!] No valid overall results to export.")
 
@@ -133,7 +133,7 @@ def export_all_results(df, count=None):
     ]
 
     for track in tracks:
-        print(f"[-] Parsing results for track: {track.upper()}...")
+        print(f"[*] Parsing results for track: {track.upper()}...")
         track_df = get_track(df, tracks.index(track))
 
         if not track_df.empty and "ProjectName" in track_df.columns and "Overall Score" in track_df.columns:
@@ -146,7 +146,7 @@ def export_all_results(df, count=None):
             track_filename = f"output/{track.replace(' ', '_').lower()}.txt"
             with open(track_filename, "w") as f:
                 f.write(track_df.to_string())
-            print(f"[✓] Exported {track} results to {track_filename} successfully...")
+            print(f"[-] Exported {track} results to {track_filename} successfully...")
         else:
             print(f"[!] No valid results for {track}. Skipping export.")
 
@@ -155,17 +155,17 @@ def list_results(df, count=None, export=None):
     sections = []
 
     tracks = [
-        "['Main Track']",
-        "['Disaster Response']",
-        "['Accessible City']",
-        "['Cybersecurity']",
-        "['webAI']",
-        "['Mobility Access']",
-        "['Public Safety Insights']"
+        "Main Track",
+        "Disaster Response",
+        "Accessible City",
+        "Cybersecurity",
+        "webAI",
+        "Mobility Access",
+        "Public Safety Insights"
     ]
 
     for track in tracks:
-        print(f"[-] Parsing data for track: {track.upper()}...")
+        print(f"[*] Parsing data for track: {track.upper()}...")
         track_df = get_track(df, tracks.index(track))
 
         if not track_df.empty and "Overall Score" in track_df.columns:
@@ -184,20 +184,20 @@ def list_results(df, count=None, export=None):
                        "No Entries\n")
 
         sections.append(section)
-        print(f"[✓] [{track.upper()}] Data loaded successfully...")
+        print(f"[-] [{track.upper()}] Data loaded successfully...")
 
     # Display all results
     sections = "\n".join(sections)
 
     if export == "all":
-        output_file = "output/list_results.txt"
+        output_file = "output/all_results.txt"
     else:
         output_file = f"output/{export}.txt"
 
     if export:
         with open(output_file, "w") as f:
             f.write(sections)
-        print(f"[✓] Exported combined results to {output_file} successfully...")
+        print(f"[-] Exported combined results to {output_file} successfully...")
 
 
 def main():
@@ -219,11 +219,9 @@ def main():
     df = load_data(file_path)
     result_df = pd.DataFrame()
 
-    print(df)
-
     # Print overall rankings to console
     if args.overall:
-        print("[-] Parsing overall data...")
+        print("[*] Parsing overall data...")
         result_df = get_overall(df, args.count)
         print(f"[-] Overall data found...")
 
@@ -238,19 +236,19 @@ def main():
             "Mobility Access",
             "Public Safety Insights"
         ]
-        print(f"[-] Parsing {tracks[args.track-1]} results...")
+        print(f"[*] Parsing {tracks[args.track-1]} results...")
         result_df = get_track(df, args.track)
 
     # Print list of suspected cheating projects
     if args.cheat:
-        print("[-] Parsing suspicious projects...")
+        print("[*] Parsing suspicious projects...")
         result_df = get_cheat(df)
         if not result_df.empty:
             print("[!] Suspicious projects found...")
 
     # Exports all tracks into a single file
     if args.list:
-        print("[-] Parsing results...")
+        print("[*] Parsing results...")
         if args.export:
             list_results(df, count=args.count, export=args.export)
         else:
@@ -258,7 +256,7 @@ def main():
 
     # Select specific file path for exporting data
     if args.export and not result_df.empty:
-        print("[-] Exporting data...")
+        print("[*] Exporting data...")
 
         # Ensure file has .txt extension
         export_path = args.export
@@ -275,9 +273,9 @@ def main():
 
     # Export all results by track and overall in separate files
     if args.exportall:
-        print("[-] Exporting all result files...")
+        print("[*] Exporting all result files...")
         export_all_results(df, count=args.count)
-        print("[✓] All result files exported successfully")
+        print("[-] All result files exported successfully")
 
 
 if __name__ == "__main__":
