@@ -1,0 +1,7 @@
+ProjectName  Innovation  Value & Impact  Completeness  Technical Implementation  Overall Score
+  Project 5        3.00            2.67          4.67                      3.33           3.42
+ Project 11        2.00            4.33          3.67                      3.00           3.25
+ Project 12        2.67            2.67          3.67                      3.33           3.08
+ Project 13        3.33            3.33          2.00                      3.33           3.00
+  Project 7        3.67            3.00          2.67                      2.67           3.00
+ Project 18        4.33            3.00          2.00                      2.00           2.83

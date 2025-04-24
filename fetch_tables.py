@@ -9,7 +9,7 @@ import argparse
 dotenv_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path)
 
-# Airtable config (demo credentials)
+# Airtable config
 BASE_ID = os.getenv("DEMO_ID")
 API_KEY = os.getenv("DEMO_KEY")
 PROJECT_TABLE = os.getenv("PROJECT_TABLE")
@@ -19,6 +19,25 @@ JUDGES_TABLE = os.getenv("JUDGES_TABLE")
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}"
 }
+
+
+def ensure_directories():
+    print("[!] Checking for directories...")
+    dirs = [
+        "data",
+        "output",
+        "output/projects",
+        "output/judging"
+    ]
+    for path in dirs:
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"[+] Created directory: {path}")
+
+
+def get_judge_id_map():
+    df = fetch_airtable_table(JUDGES_TABLE)
+    return {row["Name"]: row["id"] for _, row in df.iterrows() if "Name" in row and "id" in row}
 
 
 def fetch_airtable_table(table_name):
@@ -35,22 +54,50 @@ def fetch_airtable_table(table_name):
         response.raise_for_status()
         data = response.json()
 
-        records.extend(data.get("records", []))
+        # Include record ID in each row
+        records.extend([{"id": rec["id"], **rec["fields"]} for rec in data.get("records", [])])
         offset = data.get("offset")
 
         if not offset:
             break
 
-    return pd.DataFrame([rec["fields"] for rec in records])
+    return pd.DataFrame(records)
+
+
+def patch_airtable_field(table_name, record_id, field_name, new_value):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name}/{record_id}"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            field_name: new_value
+        }
+    }
+
+    response = requests.patch(url, headers=headers, json=data)
+    response.raise_for_status()
+    return response.json()
+
+
+def get_record_id_by_project_name(project_name):
+    df = fetch_airtable_table(PROJECT_TABLE)
+    match = df[df["Project Name"] == project_name]
+    if not match.empty:
+        return match.iloc[0]["id"]
+    return None
 
 
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
-    parser.add_argument("--projects", action="store_true", help="Path to CSV file")
-    parser.add_argument("--scores", action="store_true", help="Export results to a CSV file")
-    parser.add_argument("--judges", action="store_true", help="Show list of participant's contact info")
+    parser.add_argument("--projects", action="store_true", help="Fetch projects from Airtable")
+    parser.add_argument("--scores", action="store_true", help="Fetch scores from Airtable")
+    parser.add_argument("--judges", action="store_true", help="Fetch judges from Airtable")
 
     args = parser.parse_args()
+
+    ensure_directories()
 
     if args.projects:
         print("[*] Fetching ProjectTable from Airtable...")
@@ -67,6 +114,7 @@ def main():
     if args.judges:
         print("[*] Fetching Judges from Airtable...")
         judging_df = fetch_airtable_table(JUDGES_TABLE)
+        judging_df = judging_df["Name"]
         judging_df.to_csv("data/judges.txt", sep="\n", index=False, header=False)
         print("[-] Saved as judges.txt successfully...")
 
