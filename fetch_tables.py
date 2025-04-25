@@ -21,6 +21,20 @@ HEADERS = {
 }
 
 
+def ensure_directories():
+    print("[!] Checking for directories...")
+    dirs = [
+        "data",
+        "output",
+        "output/projects",
+        "output/judging"
+    ]
+    for path in dirs:
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"[+] Created directory: {path}")
+
+
 def fetch_airtable_table(table_name):
     records = []
     offset = None
@@ -35,13 +49,38 @@ def fetch_airtable_table(table_name):
         response.raise_for_status()
         data = response.json()
 
-        records.extend(data.get("records", []))
-        offset = data.get("offset")
+        records.extend([{"id": rec["id"], **rec["fields"]} for rec in data.get("records", [])])
 
+        offset = data.get("offset")
         if not offset:
             break
 
-    return pd.DataFrame([rec["fields"] for rec in records])
+    return pd.DataFrame(records)
+
+
+def patch_airtable_field(table_name, record_id, field_name, new_value):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name}/{record_id}"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            field_name: new_value
+        }
+    }
+
+    response = requests.patch(url, headers=headers, json=data)
+    response.raise_for_status()
+    return response.json()
+
+
+def get_record_id_by_project_name(project_name):
+    df = fetch_airtable_table(PROJECT_TABLE)
+    match = df[df["Project Name"] == project_name]
+    if not match.empty:
+        return match.iloc[0]["id"]
+    return None
 
 
 def main():
@@ -51,6 +90,8 @@ def main():
     parser.add_argument("--judges", action="store_true", help="Show list of participant's contact info")
 
     args = parser.parse_args()
+
+    ensure_directories()
 
     if args.projects:
         print("[*] Fetching ProjectTable from Airtable...")
@@ -67,6 +108,8 @@ def main():
     if args.judges:
         print("[*] Fetching Judges from Airtable...")
         judging_df = fetch_airtable_table(JUDGES_TABLE)
+        judging_df = judging_df["Name"]
+        print(judging_df)
         judging_df.to_csv("data/judges.txt", sep="\n", index=False, header=False)
         print("[-] Saved as judges.txt successfully...")
 
