@@ -116,11 +116,7 @@ def assign_tables(projects_df, count=3):
             if record_id:
                 try:
                     patch_airtable_field(PROJECT_TABLE, record_id, "Table", i)
-<<<<<<< HEAD
                     print(f"[+] [TABLE {i:<2}]".ljust(10) + f" {project.ljust(20)}")
-=======
-                    print(f"[+] [TABLE {i:<2}]".ljust(10) + f" {project.ljust(20)}" + f"| Judges: {', '.join(combo)}")
->>>>>>> ec37e204973e6f6cd1e60cd9221ffb7f918a51bc
                 except Exception as e:
                     print(f"[!] Failed to update '{project}' in Airtable: {e}")
 
