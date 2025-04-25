@@ -101,6 +101,7 @@ def main():
     parser.add_argument("--scores", action="store_true", help="Export results to a CSV file")
     parser.add_argument("--judges", action="store_true", help="Show list of participant's contact info")
     parser.add_argument("--ping", action="store_true", help="Ping Airtable base for connectivity check")
+    parser.add_argument("--dir", action="store_true", help="Create directories")
 
     args = parser.parse_args()
 
@@ -128,6 +129,9 @@ def main():
 
     if args.ping:
         ping_airtable()
+
+    if args.dir:
+        ensure_directories()
 
 
 if __name__ == "__main__":
