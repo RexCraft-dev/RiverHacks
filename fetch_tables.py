@@ -40,7 +40,7 @@ def ping_airtable():
     try:
         response = requests.get(url, headers=HEADERS)
         if response.status_code == 200:
-            print("[+] Airtable base is reachable (200 OK).")
+            print("[+] Airtable base is reachable Status Code: 200).")
         else:
             print(f"[!] Received status code: {response.status_code}")
     except requests.exceptions.RequestException as e:
