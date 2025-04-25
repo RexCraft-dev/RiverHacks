@@ -2,6 +2,8 @@
 cd ..
 call venv\\Scripts\\activate
 
+python fetch_tables.py --ping
+
 echo [SCRIPT] Updating table data...
 python fetch_tables.py --scores
 

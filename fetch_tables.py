@@ -10,8 +10,8 @@ dotenv_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path)
 
 # Airtable config (demo credentials)
-BASE_ID = os.getenv("DEMO_ID")
-API_KEY = os.getenv("DEMO_KEY")
+BASE_ID = os.getenv("BASE_ID")
+API_KEY = os.getenv("API_KEY")
 PROJECT_TABLE = os.getenv("PROJECT_TABLE")
 JUDGING_TABLE = os.getenv("JUDGING_TABLE")
 JUDGES_TABLE = os.getenv("JUDGES_TABLE")
@@ -33,6 +33,18 @@ def ensure_directories():
         if not os.path.exists(path):
             os.makedirs(path)
             print(f"[+] Created directory: {path}")
+
+
+def ping_airtable():
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{PROJECT_TABLE}"
+    try:
+        response = requests.get(url, headers=HEADERS)
+        if response.status_code == 200:
+            print("[+] Airtable base is reachable (200 OK).")
+        else:
+            print(f"[!] Received status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"[-] Error pinging Airtable: {e}")
 
 
 def fetch_airtable_table(table_name):
@@ -88,6 +100,7 @@ def main():
     parser.add_argument("--projects", action="store_true", help="Path to CSV file")
     parser.add_argument("--scores", action="store_true", help="Export results to a CSV file")
     parser.add_argument("--judges", action="store_true", help="Show list of participant's contact info")
+    parser.add_argument("--ping", action="store_true", help="Ping Airtable base for connectivity check")
 
     args = parser.parse_args()
 
@@ -112,6 +125,9 @@ def main():
         print(judging_df)
         judging_df.to_csv("data/judges.txt", sep="\n", index=False, header=False)
         print("[-] Saved as judges.txt successfully...")
+
+    if args.ping:
+        ping_airtable()
 
 
 if __name__ == "__main__":
