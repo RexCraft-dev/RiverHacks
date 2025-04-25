@@ -11,13 +11,8 @@ def save_txt_and_csv(df, base_path, filename):
     csv_path = os.path.join(base_path, f"{filename}.csv")
 
     with open(txt_path, "w", encoding="utf-8") as f:
-<<<<<<< HEAD
         f.write(df.to_string(index=True))
     df.to_csv(csv_path, index=False)
-=======
-        f.write(df.to_string(index=False))
-    df.to_csv(csv_path, index=False, float_format="%.2f")
->>>>>>> ec37e204973e6f6cd1e60cd9221ffb7f918a51bc
 
 
 def load_data(file):
@@ -145,10 +140,7 @@ def list_results(df, count=None, export=None):
 
 
 def main():
-<<<<<<< HEAD
 
-=======
->>>>>>> ec37e204973e6f6cd1e60cd9221ffb7f918a51bc
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", required=True, help="Path to CSV file")
     parser.add_argument("--overall", action="store_true", help="Show overall rankings")

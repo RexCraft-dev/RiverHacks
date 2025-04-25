@@ -9,7 +9,7 @@ import argparse
 dotenv_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path)
 
-# Airtable config
+# Airtable config (demo credentials)
 BASE_ID = os.getenv("DEMO_ID")
 API_KEY = os.getenv("DEMO_KEY")
 PROJECT_TABLE = os.getenv("PROJECT_TABLE")
@@ -35,14 +35,6 @@ def ensure_directories():
             print(f"[+] Created directory: {path}")
 
 
-<<<<<<< HEAD
-=======
-def get_judge_id_map():
-    df = fetch_airtable_table(JUDGES_TABLE)
-    return {row["Name"]: row["id"] for _, row in df.iterrows() if "Name" in row and "id" in row}
-
-
->>>>>>> ec37e204973e6f6cd1e60cd9221ffb7f918a51bc
 def fetch_airtable_table(table_name):
     records = []
     offset = None
@@ -57,13 +49,7 @@ def fetch_airtable_table(table_name):
         response.raise_for_status()
         data = response.json()
 
-<<<<<<< HEAD
         records.extend([{"id": rec["id"], **rec["fields"]} for rec in data.get("records", [])])
-=======
-        # Include record ID in each row
-        records.extend([{"id": rec["id"], **rec["fields"]} for rec in data.get("records", [])])
-        offset = data.get("offset")
->>>>>>> ec37e204973e6f6cd1e60cd9221ffb7f918a51bc
 
         offset = data.get("offset")
         if not offset:
@@ -99,9 +85,9 @@ def get_record_id_by_project_name(project_name):
 
 def main():
     parser = argparse.ArgumentParser(description="Process hackathon scores.")
-    parser.add_argument("--projects", action="store_true", help="Fetch projects from Airtable")
-    parser.add_argument("--scores", action="store_true", help="Fetch scores from Airtable")
-    parser.add_argument("--judges", action="store_true", help="Fetch judges from Airtable")
+    parser.add_argument("--projects", action="store_true", help="Path to CSV file")
+    parser.add_argument("--scores", action="store_true", help="Export results to a CSV file")
+    parser.add_argument("--judges", action="store_true", help="Show list of participant's contact info")
 
     args = parser.parse_args()
 
@@ -123,10 +109,7 @@ def main():
         print("[*] Fetching Judges from Airtable...")
         judging_df = fetch_airtable_table(JUDGES_TABLE)
         judging_df = judging_df["Name"]
-<<<<<<< HEAD
         print(judging_df)
-=======
->>>>>>> ec37e204973e6f6cd1e60cd9221ffb7f918a51bc
         judging_df.to_csv("data/judges.txt", sep="\n", index=False, header=False)
         print("[-] Saved as judges.txt successfully...")
 
