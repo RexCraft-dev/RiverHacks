@@ -43,7 +43,8 @@ def extract_contacts(df, project="."):
         ("ProjectName", "Member 2 Name", "Member 2 Email"),
         ("ProjectName", "Member 3 Name", "Member 3 Email"),
         ("ProjectName", "Member 4 Name", "Member 4 Email"),
-        ("ProjectName", "Member 5 Name", "Member 5 Email")
+        ("ProjectName", "Member 5 Name", "Member 5 Email"),
+        ("ProjectName", "Member 6 Name", "Member 6 Email")
     ]
 
     output_lines = []
